@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -166,6 +166,12 @@ return [
          * Package Service Providers...
          */
 
+        UxWeb\SweetAlert\SweetAlertServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        Jorenvh\Share\Providers\ShareServiceProvider::class,
+        RachidLaasri\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -174,6 +180,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
 
     ],
 
@@ -215,7 +222,7 @@ return [
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
-        // 'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
         'Request' => Illuminate\Support\Facades\Request::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
@@ -226,7 +233,41 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Alert' => UxWeb\SweetAlert\SweetAlert::class,
+        'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
+        'Share' => Jorenvh\Share\ShareFacade::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+    ],
 
+    'languages' => [
+        'ar' => 'Arabic',
+        'bn' => 'Bangla',
+        'bg' => 'Bulgarian',
+        'zh' => 'Chinese',
+        'nl' => 'Dutch',
+        'en' => 'English',
+        'fr' => 'French',
+        'de' => 'German',
+        'ht' => 'Haitian Creole',
+        'hi' => 'Hindi',
+        'he' => 'Hebrew',
+        'it' => 'Italian',
+        'ja' => 'Japanese',
+        'lt' => 'Lithuanian',
+        'ms' => 'Malay',
+        'pt' => 'Portuguese',
+        'pl' => 'Polish',
+        'ro' => 'Romanian',
+        'ru' => 'Russian',
+        'es' => 'Spanish',
+        'si' => 'Sinhala',
+        'sv' => 'Swedish',
+        'ta' => 'Tamil',
+        'th' => 'Thai',
+        'tr' => 'Turkish',
+        'ur' => 'Urdu',
+        'vi' => 'Vietnamese'
     ],
 
 ];
