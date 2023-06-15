@@ -175,6 +175,9 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'namespace' => 'User', 'middl
 // Choose Payment Gateway
 Route::post('/prepare-payment/{planId}', 'Payment\PaymentController@preparePaymentGateway')->name('prepare.payment.gateway');
 
+// Paystack Payment Gateway
+Route::get('/payment/callback', 'PaystackController@handleGatewayCallback')->name('payment');
+
 // PayPal Payment Gateway
 Route::get('/payment-paypal/{planId}', 'Payment\PaypalController@paywithpaypal')->name('paywithpaypal');
 Route::get('/payment/status', 'Payment\PaypalController@paypalPaymentStatus')->name('paypalPaymentStatus');

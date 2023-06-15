@@ -240,7 +240,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Client Key') }}</label>
                                                 <input type="text" class="form-control" name="paypal_client_key"
-                                                    value="{{ $config[4]->config_value }}"
+                                                    value="paypal_client_key"
                                                     placeholder="{{ __('Client Key') }}..." required>
                                             </div>
                                         </div>
@@ -248,7 +248,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label" required>{{ __('Secret') }}</label>
                                                 <input type="text" class="form-control" name="paypal_secret"
-                                                    value="{{ $config[5]->config_value }}"
+                                                    value="paypal_secret"
                                                     placeholder="{{ __('Secret') }}..." required>
                                             </div>
                                         </div>
@@ -259,7 +259,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Client Key') }}</label>
                                                 <input type="text" class="form-control" name="razorpay_client_key"
-                                                    value="{{ $config[6]->config_value }}"
+                                                    value="razorpay"
                                                     placeholder="{{ __('Client Key') }}..." required>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Secret') }}</label>
                                                 <input type="text" class="form-control" name="razorpay_secret"
-                                                    value="{{ $config[7]->config_value }}"
+                                                    value="razorpay_secret"
                                                     placeholder="{{ __('Secret') }}..." required>
                                             </div>
                                         </div>
@@ -278,7 +278,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Publishable Key') }}</label>
                                                 <input type="text" class="form-control" name="stripe_publishable_key"
-                                                    value="{{ $config[9]->config_value }}"
+                                                    value="stripe_publishable_key"
                                                     placeholder="{{ __('Publishable Key') }}..." required>
                                             </div>
                                         </div>
@@ -286,7 +286,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Secret') }}</label>
                                                 <input type="text" class="form-control" name="stripe_secret"
-                                                    value="{{ $config[10]->config_value }}"
+                                                    value="stripe_secret"
                                                     placeholder="{{ __('Secret') }}..." required>
                                             </div>
                                         </div>
@@ -297,73 +297,58 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Theme Colors') }}</label>
                                                 <div class="row g-2">
+                                                    @php
+                                                    $configValue = isset($config[11]->config_value) ? $config[11]->config_value : '';
+                                                    @endphp
 
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="blue"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'blue' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="blue" class="form-colorinput-input" {{ $configValue == 'blue' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-blue"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput form-colorinput-light">
-                                                            <input name="app_theme" type="radio" value="indigo"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'indigo' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="indigo" class="form-colorinput-input" {{ $configValue == 'indigo' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-indigo"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="green"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'green' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="green" class="form-colorinput-input" {{ $configValue == 'green' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-green"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="yellow"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'yellow' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="yellow" class="form-colorinput-input" {{ $configValue == 'yellow' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-yellow"></span>
                                                         </label>
                                                     </div>
-
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="red"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'red' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="red" class="form-colorinput-input" {{ $configValue == 'red' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-red"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="purple"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'purple' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="purple" class="form-colorinput-input" {{ $configValue == 'purple' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-purple"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput">
-                                                            <input name="app_theme" type="radio" value="pink"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'pink' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="pink" class="form-colorinput-input" {{ $configValue == 'pink' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-pink"></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-auto">
                                                         <label class="form-colorinput form-colorinput-light">
-                                                            <input name="app_theme" type="radio" value="gray"
-                                                                class="form-colorinput-input"
-                                                                {{ $config[11]->config_value == 'gray' ? 'checked' : ''  }} />
+                                                            <input name="app_theme" type="radio" value="gray" class="form-colorinput-input" {{ $configValue == 'gray' ? 'checked' : ''  }} />
                                                             <span class="form-colorinput-color bg-dark"></span>
                                                         </label>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -443,11 +428,10 @@
                                         <div class="col-md-6 col-xl-6">
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Share Content') }}</label>
-                                                <textarea class="form-control" name="share_content" id="share_content"
-                                                    cols="10" rows="3"
-                                                    placeholder="{{ __('Share Content') }}..." required>{{ $config[30]->config_value }}</textarea>
+                                                <textarea class="form-control" name="share_content" id="share_content" cols="10" rows="3" placeholder="{{ __('Share Content') }}" required>{{ isset($config[30]) ? $config[30]->config_value : '' }}</textarea>
                                             </div>
                                         </div>
+
                                         <div class="col-md-6 col-xl-6">
                                             <h2 class="text-danger"> {{ __('Short Codes :') }} </h2>
                                             <span><span class="font-weight-bold">{ business_name }</span> - {{ __('Business Name') }}</span><br>

@@ -61,6 +61,7 @@ class PaymentMethodController extends Controller
         $paymentMethod->payment_gateway_name = $request->payment_gateway_name;
         $paymentMethod->client_id = $request->client_id;
         $paymentMethod->secret_key = $request->secret_key;
+        $paymentMethod->display_name = '';
         $paymentMethod->save();
         alert()->success(trans('New Payment Method Created Successfully!'));
         return redirect()->route('admin.add.payment.method');

@@ -181,6 +181,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+        Unicodeveloper\Paystack\PaystackServiceProvider::class,
+
 
     ],
 
@@ -238,6 +240,7 @@ return [
         'Share' => Jorenvh\Share\ShareFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class
     ],
 
     'languages' => [

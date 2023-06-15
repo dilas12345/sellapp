@@ -56,21 +56,27 @@
                                             </div>
                                         </td>
                                         <td class="text-bold">
-                                            {{ $currency->symbol }}
+                                            N
                                             {{ $selected_plan->plan_price == '0' ? 0 : number_format($selected_plan->plan_price,2) }}
                                         </td>
                                     </tr>
 
-                                    @if ($config[25]->config_value > 0)
+                                    @if ($total > 0)
 
+                                    @php
+                                        $gstRate = 18; // GST rate in percentage
+                                        $planPrice = $selected_plan->plan_price;
+                                        $taxAmount = $planPrice * $gstRate / 100;
+                                        $totalAmount = $planPrice + $taxAmount;
+                                    @endphp
                                     <tr>
                                         <td>
                                             <div>
-                                                {{ $config[24]->config_value }}
+                                            GST (18%):
                                             </div>
                                         </td>
-                                        <td class="text-bold"> {{ $currency->symbol }}
-                                            {{ number_format($selected_plan->plan_price * $config[25]->config_value / 100, 2) }}
+                                        <td class="text-bold"> <Nav></Nav>
+                                            N {{ number_format($taxAmount, 2) }}
                                         </td>
                                     </tr>
 
@@ -79,8 +85,8 @@
 
                                     <tr>
                                         <td class="h3 text-bold"> {{ __('Total Payable') }} </td>
-                                        <td class="w-1 text-bold h3"> {{ $currency->symbol }}
-                                            {{ number_format($total, 2) }}
+                                        <td class="w-1 text-bold h3"> N
+                                         {{ number_format($totalAmount, 2) }}
                                         </td>
                                     </tr>
 
