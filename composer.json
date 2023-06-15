@@ -25,11 +25,13 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "laravolt/avatar": "^4.1",
+        "myckhel/laravel-paystack": "^1.1",
         "paypal/rest-api-sdk-php": "^1.14",
         "rachidlaasri/laravel-installer": "^4.1",
         "razorpay/razorpay": "2.*",
         "spatie/laravel-cookie-consent": "^2.12",
         "stripe/stripe-php": "^7.91",
+        "unicodeveloper/laravel-paystack": "^1.1",
         "uxweb/sweet-alert": "^2.0"
     },
     "require-dev": {
