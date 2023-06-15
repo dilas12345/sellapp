@@ -46,7 +46,7 @@
                                                             @if ($plan->plan_price == '0')
                                                             {{ $plan->plan_name}} ({{ __('Free') }})
                                                             @else
-                                                            {{ $plan->plan_name }} ({{ $config[1]->config_value}} {{ $plan->plan_price }})
+                                                            {{ $plan->plan_name }} ({{ $plan->plan_price }})
                                                             @endif
                                                         </option>
                                                     @endforeach
