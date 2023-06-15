@@ -140,15 +140,16 @@ class UserController extends Controller
 
             $invoice_details = [];
 
-            $invoice_details['from_billing_name'] = $config[16]->config_value;
-            $invoice_details['from_billing_address'] = $config[19]->config_value;
-            $invoice_details['from_billing_city'] = $config[20]->config_value;
-            $invoice_details['from_billing_state'] = $config[21]->config_value;
-            $invoice_details['from_billing_zipcode'] = $config[22]->config_value;
-            $invoice_details['from_billing_country'] = $config[23]->config_value;
-            $invoice_details['from_vat_number'] = $config[26]->config_value;
-            $invoice_details['from_billing_phone'] = $config[18]->config_value;
-            $invoice_details['from_billing_email'] = $config[17]->config_value;
+            $invoice_details['from_billing_name'] = $request->billing_name;
+            $invoice_details['from_billing_address'] = $request->billing_address;
+            $invoice_details['from_billing_city'] = $request->billing_city;
+            $invoice_details['from_billing_state'] = $request->billing_state;
+            $invoice_details['from_billing_zipcode'] = $request->billing_zipcode;
+            $invoice_details['from_billing_country'] = $request->billing_country;
+            $invoice_details['from_vat_number'] = $request->vat_number;
+            $invoice_details['from_billing_phone'] = $request->billing_phone;
+            $invoice_details['from_billing_email'] = $request->billing_email;
+
             $invoice_details['to_billing_name'] = $user_details->billing_name;
             $invoice_details['to_billing_address'] = $user_details->billing_address;
             $invoice_details['to_billing_city'] = $user_details->billing_city;
@@ -158,9 +159,11 @@ class UserController extends Controller
             $invoice_details['to_billing_phone'] = $user_details->billing_phone;
             $invoice_details['to_billing_email'] = $user_details->billing_email;
             $invoice_details['to_vat_number'] = $user_details->vat_number;
-            $invoice_details['tax_name'] = $config[24]->config_value;
-            $invoice_details['tax_type'] = $config[14]->config_value;
-            $invoice_details['tax_value'] = $config[25]->config_value;
+
+            $invoice_details['tax_name'] = $request->tax_name;
+            $invoice_details['tax_type'] = $request->tax_type;
+            $invoice_details['tax_value'] = $request->tax_value;
+
             $invoice_details['invoice_amount'] = $amountToBePaid;
             $invoice_details['subtotal'] = $plan_data->plan_price;
             $invoice_details['tax_amount'] = (int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100;
@@ -248,21 +251,26 @@ class UserController extends Controller
             }
 
             $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+            //remember to fall back to the one below!!
+            // $invoice_prefix = $config->where('config_key', 'invoice_prefix')->first()->config_value;
+            // $invoice_count = Transaction::where('invoice_prefix', $invoice_prefix)->count();
+
             $invoice_number = $invoice_count + 1;
 
             $gobiz_transaction_id = uniqid();
 
             $invoice_details = [];
 
-            $invoice_details['from_billing_name'] = $config[16]->config_value;
-            $invoice_details['from_billing_address'] = $config[19]->config_value;
-            $invoice_details['from_billing_city'] = $config[20]->config_value;
-            $invoice_details['from_billing_state'] = $config[21]->config_value;
-            $invoice_details['from_billing_zipcode'] = $config[22]->config_value;
-            $invoice_details['from_billing_country'] = $config[23]->config_value;
-            $invoice_details['from_vat_number'] = $config[26]->config_value;
-            $invoice_details['from_billing_phone'] = $config[18]->config_value;
-            $invoice_details['from_billing_email'] = $config[17]->config_value;
+            $invoice_details['from_billing_name'] = $request->billing_name;
+            $invoice_details['from_billing_address'] = $request->billing_address;
+            $invoice_details['from_billing_city'] = $request->billing_city;
+            $invoice_details['from_billing_state'] = $request->billing_state;
+            $invoice_details['from_billing_zipcode'] = $request->billing_zipcode;
+            $invoice_details['from_billing_country'] = $request->billing_country;
+            $invoice_details['from_vat_number'] = $request->vat_number;
+            $invoice_details['from_billing_phone'] = $request->billing_phone;
+            $invoice_details['from_billing_email'] = $request->billing_email;
+
             $invoice_details['to_billing_name'] = $user_details->billing_name;
             $invoice_details['to_billing_address'] = $user_details->billing_address;
             $invoice_details['to_billing_city'] = $user_details->billing_city;
@@ -272,9 +280,10 @@ class UserController extends Controller
             $invoice_details['to_billing_phone'] = $user_details->billing_phone;
             $invoice_details['to_billing_email'] = $user_details->billing_email;
             $invoice_details['to_vat_number'] = $user_details->vat_number;
-            $invoice_details['tax_name'] = $config[24]->config_value;
-            $invoice_details['tax_type'] = $config[14]->config_value;
-            $invoice_details['tax_value'] = $config[25]->config_value;
+            $invoice_details['tax_name'] = $request->tax_name;
+            $invoice_details['tax_type'] = $request->tax_type;
+            $invoice_details['tax_value'] = $request->tax_value;
+
             $invoice_details['invoice_amount'] = $amountToBePaid;
             $invoice_details['subtotal'] = $plan_data->plan_price;
             $invoice_details['tax_amount'] = (int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100;
@@ -291,7 +300,17 @@ class UserController extends Controller
             $transaction->transaction_amount = $amountToBePaid;
             $transaction->invoice_prefix = $config[15]->config_value;
             $transaction->invoice_number = $invoice_number;
-            $transaction->transaction_currency = $config[1]->config_value;
+            // $transaction->transaction_currency = $config[1]->config_value;
+            $transaction_currency = $config->where('config_key', 'transaction_currency')->first();
+
+            if ($transaction_currency) {
+                $transaction->transaction_currency = $transaction_currency->config_value;
+            } else {
+                // Handle the case when the configuration value is missing or null
+                // You can assign a default value or take appropriate action
+                $transaction->transaction_currency = 'default_currency';
+            };
+            
             $transaction->invoice_details = json_encode($invoice_details);
             $transaction->payment_status = "SUCCESS";
             $transaction->save();

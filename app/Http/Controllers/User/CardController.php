@@ -75,7 +75,7 @@ class CardController extends Controller
         $settings = Setting::where('status', 1)->first();
         // $currency = Currency::where('iso_code', $config[1]->config_value)->first();
         // $currency = array('aed'=>'AED','afn'=>'&#1547;','all'=>'&#76;&#101;&#107;','amd'=>'AMD','ang'=>'&#402;','aoa'=>'AOA','ars'=>'&#36;','aud'=>'&#36;','awg'=>'&#402;','azn'=>'&#1084;&#1072;&#1085;','bam'=>'&#75;&#77;','bbd'=>'&#36;','bdt'=>'BDT','bgn'=>'&#1083;&#1074;','bhd'=>'BHD','bif'=>'BIF','bmd'=>'&#36;','bnd'=>'&#36;','bob'=>'&#36;&#98;','brl'=>'&#82;&#36;','bsd'=>'&#36;','btn'=>'BTN','bwp'=>'&#80;','byr'=>'&#112;&#46;','bzd'=>'&#66;&#90;&#36;','cad'=>'&#36;','cdf'=>'CDF','chf'=>'&#67;&#72;&#70;','clp'=>'&#36;','cny'=>'&#165;','cop'=>'&#36;','crc'=>'&#8353;','cuc'=>'CUC','cup'=>'&#8369;','cve'=>'CVE','czk'=>'&#75;&#269;','djf'=>'DJF','dkk'=>'&#107;&#114;','dop'=>'&#82;&#68;&#36;','dzd'=>'DZD','egp'=>'&#163;','ern'=>'ERN','etb'=>'ETB','eur'=>'&#8364;','fjd'=>'&#36;','fkp'=>'&#163;','gbp'=>'&#163;','gel'=>'GEL','ggp'=>'&#163;','ghs'=>'&#162;','gip'=>'&#163;','gmd'=>'GMD','gnf'=>'GNF','gtq'=>'&#81;','gyd'=>'&#36;','hkd'=>'&#36;','hnl'=>'&#76;','hrk'=>'&#107;&#110;','htg'=>'HTG','huf'=>'&#70;&#116;','idr'=>'&#82;&#112;','ils'=>'&#8362;','imp'=>'&#163;','inr'=>'&#8377;','iqd'=>'IQD','irr'=>'&#65020;','isk'=>'&#107;&#114;','jep'=>'&#163;','jmd'=>'&#74;&#36;','jod'=>'JOD','jpy'=>'&#165;','kes'=>'KES','kgs'=>'&#1083;&#1074;','khr'=>'&#6107;','kmf'=>'KMF','kpw'=>'&#8361;','krw'=>'&#8361;','kwd'=>'KWD','kyd'=>'&#36;','kzt'=>'&#1083;&#1074;','lak'=>'&#8365;','lbp'=>'&#163;','lkr'=>'&#8360;','lrd'=>'&#36;','lsl'=>'LSL','lyd'=>'LYD','mad'=>'MAD','mdl'=>'MDL','mga'=>'MGA','mkd'=>'&#1076;&#1077;&#1085;','mmk'=>'MMK','mnt'=>'&#8366;','mop'=>'MOP','mro'=>'MRO','mur'=>'&#8360;','mvr'=>'MVR','mwk'=>'MWK','mxn'=>'&#36;','myr'=>'&#82;&#77;','mzn'=>'&#77;&#84;','nad'=>'&#36;','ngn'=>'&#8358;','nio'=>'&#67;&#36;','nok'=>'&#107;&#114;','npr'=>'&#8360;','nzd'=>'&#36;','omr'=>'&#65020;','pab'=>'&#66;&#47;&#46;','pen'=>'&#83;&#47;&#46;','pgk'=>'PGK','php'=>'&#8369;','pkr'=>'&#8360;','pln'=>'&#122;&#322;','prb'=>'PRB','pyg'=>'&#71;&#115;','qar'=>'&#65020;','ron'=>'&#108;&#101;&#105;','rsd'=>'&#1044;&#1080;&#1085;&#46;','rub'=>'&#1088;&#1091;&#1073;','rwf'=>'RWF','sar'=>'&#65020;','sbd'=>'&#36;','scr'=>'&#8360;','sdg'=>'SDG','sek'=>'&#107;&#114;','sgd'=>'&#36;','shp'=>'&#163;','sll'=>'SLL','sos'=>'&#83;','srd'=>'&#36;','ssp'=>'SSP','std'=>'STD','syp'=>'&#163;','szl'=>'SZL','thb'=>'&#3647;','tjs'=>'TJS','tmt'=>'TMT','tnd'=>'TND','top'=>'TOP','try'=>'&#8378;','ttd'=>'&#84;&#84;&#36;','twd'=>'&#78;&#84;&#36;','tzs'=>'TZS','uah'=>'&#8372;','ugx'=>'UGX','usd'=>'&#36;','uyu'=>'&#36;&#85;','uzs'=>'&#1083;&#1074;','vef'=>'&#66;&#115;','vnd'=>'&#8363;','vuv'=>'VUV','wst'=>'WST','xaf'=>'XAF','xcd'=>'&#36;','xof'=>'XOF','xpf'=>'XPF','yer'=>'&#65020;','zar'=>'&#82;','zmw'=>'ZMW');
-        $currency ='usd';
+        $currency ='ngn';
         $remaining_days = 0;
 
         if (isset($active_plan)) {
@@ -122,17 +122,35 @@ class CardController extends Controller
                     $business_name = $card_details->title;
                     $profile = URL::to('/') . "/" . $business_card_details->profile;
 
-                    $shareContent = $config[30]->config_value;
-                    $shareContent = str_replace("{ business_name }", $business_name, $shareContent);
-                    $shareContent = str_replace("{ business_url }", $url, $shareContent);
-                    $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                    $shareContentConfig = $config->where('config_key', 'share_content')->first();
 
-                    // If branding enabled, then show app name.
+                    if ($shareContentConfig) {
+                        $shareContent = $shareContentConfig->config_value;
+                        $shareContent = str_replace("{ business_name }", $business_name, $shareContent);
+                        $shareContent = str_replace("{ business_url }", $url, $shareContent);
+                        $shareContent = str_replace("{ appName }", $config->first()->config_value, $shareContent);
+
+                        // If branding enabled, then show app name.
+                        if ($plan_details['hide_branding'] == "1") {
+                            $shareContent = str_replace("{ appName }", $business_name, $shareContent);
+                        } else {
+                            $shareContent = str_replace("{ appName }", $config->first()->config_value, $shareContent);
+                        }
+
+                        $url = urlencode($url);
+                        $shareContent = urlencode($shareContent);
+                    } else {
+                        // Handle the case when the share_content configuration is missing
+                        // You can assign a default value or take appropriate action
+                        $shareContent = 'default_share_content';
+                    }
+
+                    $appNameConfig = $config->where('config_key', 'app_name')->first();
 
                     if ($plan_details['hide_branding'] == "1") {
                         $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                     } else {
-                        $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                        $shareContent = str_replace("{ appName }", $appNameConfig->config_value ?? 'default_app_name', $shareContent);
                     }
 
                     $url = urlencode($url);
@@ -740,15 +758,18 @@ class CardController extends Controller
 
                     $invoice_details = [];
 
-                    $invoice_details['from_billing_name'] = $config[16]->config_value;
-                    $invoice_details['from_billing_address'] = $config[19]->config_value;
-                    $invoice_details['from_billing_city'] = $config[20]->config_value;
-                    $invoice_details['from_billing_state'] = $config[21]->config_value;
-                    $invoice_details['from_billing_zipcode'] = $config[22]->config_value;
-                    $invoice_details['from_billing_country'] = $config[23]->config_value;
-                    $invoice_details['from_vat_number'] = $config[26]->config_value;
-                    $invoice_details['from_billing_phone'] = $config[18]->config_value;
-                    $invoice_details['from_billing_email'] = $config[17]->config_value;
+                    // dd($invoice_details);
+
+                    $invoice_details['from_billing_name'] = $request->from_billing_name;
+                    $invoice_details['from_billing_address'] = $request->from_billing_address;
+                    $invoice_details['from_billing_city'] = $request->from_billing_city;
+                    $invoice_details['from_billing_state'] = $request->from_billing_state;
+                    $invoice_details['from_billing_zipcode'] = $request->from_billing_zipcode;
+                    $invoice_details['from_billing_country'] = $request->from_billing_country;
+                    $invoice_details['from_vat_number'] = $request->from_vat_number;
+                    $invoice_details['from_billing_phone'] = $request->from_billing_phone;
+                    $invoice_details['from_billing_email'] = $request->from_billing_email;
+
                     $invoice_details['to_billing_name'] = $request->billing_name;
                     $invoice_details['to_billing_address'] = $request->billing_address;
                     $invoice_details['to_billing_city'] = $request->billing_city;
@@ -758,9 +779,9 @@ class CardController extends Controller
                     $invoice_details['to_billing_phone'] = $request->billing_phone;
                     $invoice_details['to_billing_email'] = $request->billing_email;
                     $invoice_details['to_vat_number'] = $request->vat_number;
-                    $invoice_details['tax_name'] = $config[24]->config_value;
-                    $invoice_details['tax_type'] = $config[14]->config_value;
-                    $invoice_details['tax_value'] = $config[25]->config_value;
+                    $invoice_details['tax_name'] = $request->tax_name;
+                    $invoice_details['tax_type'] = $request->tax_type;
+                    $invoice_details['tax_value'] = $request->tax_value;
                     $invoice_details['invoice_amount'] = 0;
                     $invoice_details['subtotal'] = 0;
                     $invoice_details['tax_amount'] = 0;
@@ -774,7 +795,17 @@ class CardController extends Controller
                     $transaction->desciption = $selected_plan->plan_name . " Plan";
                     $transaction->payment_gateway_name = "FREE";
                     $transaction->transaction_amount = $selected_plan->plan_price;
-                    $transaction->transaction_currency = $config[1]->config_value;
+                    // $transaction->transaction_currency = $config[1]->config_value;
+                    $transaction_currency = $config->where('config_key', 'transaction_currency')->first();
+
+                    if ($transaction_currency) {
+                        $transaction->transaction_currency = $transaction_currency->config_value;
+                    } else {
+                        // Handle the case when the configuration value is missing or null
+                        // You can assign a default value or take appropriate action
+                        $transaction->transaction_currency = 'default_currency';
+                    }
+
                     $transaction->invoice_details = json_encode($invoice_details);
                     $transaction->payment_status = "SUCCESS";
                     $transaction->save();
