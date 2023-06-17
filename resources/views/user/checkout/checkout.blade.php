@@ -56,7 +56,7 @@
                                             </div>
                                         </td>
                                         <td class="text-bold">
-                                            N
+                                        ₦
                                             {{ $selected_plan->plan_price == '0' ? 0 : number_format($selected_plan->plan_price,2) }}
                                         </td>
                                     </tr>
@@ -76,7 +76,7 @@
                                             </div>
                                         </td>
                                         <td class="text-bold"> <Nav></Nav>
-                                            N {{ number_format($taxAmount, 2) }}
+                                        ₦ {{ number_format($taxAmount, 2) }}
                                         </td>
                                     </tr>
 
@@ -85,7 +85,7 @@
 
                                     <tr>
                                         <td class="h3 text-bold"> {{ __('Total Payable') }} </td>
-                                        <td class="w-1 text-bold h3"> N
+                                        <td class="w-1 text-bold h3"> ₦
                                          {{ number_format($totalAmount, 2) }}
                                         </td>
                                     </tr>

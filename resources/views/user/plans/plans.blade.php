@@ -82,7 +82,7 @@
                             </div>
                             <div class="my-3">
                                 <h1 class="display-5 font-weight-bold">
-                                    {{ $plan->plan_price == '0' ? '' : '$' }}{{ $plan->plan_price == '0' ? 'FREE' : $plan->plan_price }}
+                                    {{ $plan->plan_price == '0' ? '' : '₦' }}{{ $plan->plan_price == '0' ? 'FREE' : $plan->plan_price }}
                                 </h1>
 
                                 <small class="text-capitalize">
