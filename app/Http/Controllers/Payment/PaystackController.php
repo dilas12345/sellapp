@@ -1,188 +1,174 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payment;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
-use Paystack;
-use Illuminate\Support\Carbon;
-use App\BusinessCard;
-use URL;
-use App\Plan;
 use App\User;
-use Illuminate\Support\Facades\DB;
+use App\Plan;
+use App\Transaction;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
+use Paystack;
 use App\Transaction as TransactionModel;
+use Illuminate\Support\Facades\DB;
 
 class PaystackController extends Controller
 {
-
-    /**
-     * Redirect the User to Paystack Payment Page
-     * @return Url
-     */
-    public function redirectToGateway()
+    public function payWithPaystack(Request $request, $planId)
     {
-        try{
-            return Paystack::getAuthorizationUrl()->redirectNow();
-        }catch(\Exception $e) {
-            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
-        }        
-    }
+        if (Auth::check()) {
+            $config = DB::table('config')->get();
+            $userData = User::where('id', Auth::user()->id)->first();
 
-    /**
-     * Obtain Paystack payment information
-     * @return void
-     */
-    public function handleGatewayCallback()
-    {
-        $paymentDetails = Paystack::getPaymentData();
+            $plan_details = Plan::where('plan_id', $planId)->where('status', 1)->first();
 
-        dd($paymentDetails);
-        // Now you have the payment details,
-        // you can store the authorization_code in your db to allow for recurrent subscriptions
-        // you can then redirect or do whatever you want
-    }
+            if ($plan_details == null) {
+                return view('errors.404');
+            } else {
+                // $amountToBePaid = ((int)($plan_details->plan_price) * (int)($config[25]->config_value) / 100) + (int)($plan_details->plan_price) * 100;
 
-    public function payWithpaystack(Request $request, $planId)
-    {
-        if(Auth::user()) {
-        $plan_details = Plan::where('plan_id', $planId)->where('status', 1)->first();
-        $config = DB::table('config')->get();
-        $userData = User::where('id', Auth::user()->id)->first();
+                $taxPercentage = isset($config[25]) ? (int) $config[25]->config_value : 0;
+                $amountToBePaid = ($plan_details->plan_price * $taxPercentage / 100) + ($plan_details->plan_price * 100);
+                
+                $gobiz_transaction_id = uniqid();
+                $paymentReference = Paystack::genTranxRef();
 
-        if ($plan_details == null) {
-            return view('errors.404');
-        } else {
+                $invoice_details = [];
 
-            // $amountToBePaid = ((int)($plan_details->plan_price) * (int)($config[25]->config_value) / 100) + (int)($plan_details->plan_price);
-            $tax_rate = 0; // Replace with the appropriate tax rate value or reference
+                $invoice_details['from_billing_name'] = $userData->billing_name;
+                $invoice_details['from_billing_address'] = $userData->billing_address;
+                $invoice_details['from_billing_city'] = $userData->billing_city;
+                $invoice_details['from_billing_state'] = $userData->billing_state;
+                $invoice_details['from_billing_zipcode'] = $userData->billing_zipcode;
+                $invoice_details['from_billing_country'] = $userData->billing_country;
+                $invoice_details['from_vat_number'] = $userData->vat_number;
+                $invoice_details['from_billing_phone'] = $userData->billing_phone;
+                $invoice_details['from_billing_email'] = $userData->billing_email;
 
-            if (isset($config[25])) {
-                $tax_rate = (int) $config[25]->config_value;
-            }
+                $invoice_details['to_billing_name'] = $userData->billing_name;
+                $invoice_details['to_billing_address'] = $userData->billing_address;
+                $invoice_details['to_billing_city'] = $userData->billing_city;
+                $invoice_details['to_billing_state'] = $userData->billing_state;
+                $invoice_details['to_billing_zipcode'] = $userData->billing_zipcode;
+                $invoice_details['to_billing_country'] = $userData->billing_country;
+                $invoice_details['to_billing_phone'] = $userData->billing_phone;
+                $invoice_details['to_billing_email'] = $userData->billing_email;
+                $invoice_details['to_vat_number'] = $userData->vat_number;
+                
+                $invoice_details['tax_name'] = $userData->tax_name;
+                $invoice_details['tax_type'] = $userData->tax_type;
+                $invoice_details['tax_value'] = $userData->tax_value;
 
-            $amountToBePaid = ((int)($plan_details->plan_price) * $tax_rate / 100) + (int)($plan_details->plan_price);
+                $invoice_details['invoice_amount'] = $amountToBePaid;
+                $invoice_details['subtotal'] = $plan_details->plan_price;
+                // $invoice_details['tax_amount'] = (int)($plan_details->plan_price) * (int)($config[25]->config_value) / 100;
+                $taxAmount = 0; // Default value if key 25 is not found
 
-            $payer = new Payer();
-            $payer->setPaymentMethod('paystack');
-
-            $item_1 = new Item();
-            $item_1->setName($plan_details->plan_name . " Plan")
-                /** item name **/
-                ->setCurrency($config[1]->config_value)
-                ->setQuantity(1)
-                ->setPrice($amountToBePaid);
-            /** unit price **/
-
-            $item_list = new ItemList();
-            $item_list->setItems(array($item_1));
-
-            $amount = new Amount();
-            $amount->setCurrency($config[1]->config_value)
-                ->setTotal($amountToBePaid);
-            $redirect_urls = new RedirectUrls();
-            /** Specify return URL **/
-            $redirect_urls->setReturnUrl(URL::route('paypalPaymentStatus'))
-                ->setCancelUrl(URL::route('paypalPaymentStatus'));
-
-            $transaction = new Transaction();
-            $transaction->setAmount($amount)
-                ->setItemList($item_list)
-                ->setDescription($plan_details->plan_name . " Plan");
-
-            $payment = new Payment();
-            $payment->setIntent('Sale')
-                ->setPayer($payer)
-                ->setRedirectUrls($redirect_urls)
-                ->setTransactions(array($transaction));
-            try {
-                $payment->create($this->_api_context);
-            } catch (\PayPal\Exception\PPConnectionException $ex) {
-                if (\Config::get('app.debug')) {
-                    \Session::put('error', 'Connection timeout');
-                    alert()->error(trans("Payment failed, Something went wrong!"));
-                    return redirect()->route('user.plans');
-                } else {
-                    \Session::put('error', 'Some error occur, sorry for inconvenient');
-                    alert()->error(trans("Payment failed, Something went wrong!"));
-                    return redirect()->route('user.plans');
+                if (isset($config[25])) {
+                    $taxAmount = (int)($plan_details->plan_price) * (int)($config[25]->config_value) / 100;
                 }
+
+                $invoice_details['tax_amount'] = $taxAmount;
+                
+                //create transaction and save to database.
+                $transaction = new Transaction();
+                $transaction->gobiz_transaction_id = $gobiz_transaction_id;
+                $transaction->transaction_date = now();
+                $transaction->transaction_id = $paymentReference;
+                $transaction->user_id = Auth::user()->id;
+                $transaction->plan_id = $plan_details->plan_id;
+                $transaction->description = $plan_details->plan_name . " Plan";
+                $transaction->payment_gateway_name = "Paystack";
+                $transaction->transaction_amount = $amountToBePaid / 100; // Convert back to Naira
+                // $transaction->transaction_currency = $config[1]->config_value;
+                $transactionCurrency = isset($config[1]) ? $config[1]->config_value : 'default_currency';
+                $transaction->transaction_currency = $transactionCurrency;
+                $transaction->invoice_details = json_encode($invoice_details);
+                $transaction->payment_status = "PENDING";
+                $transaction->save();
+
+                // // dd("Amount to Pay", $amountToBePaid);
+                // $paymentUrl = Paystack::getAuthorizationUrl()->with([
+                //     'amount' => 700 * 100, //$amountToBePaid,
+                //     'email' => $userData->billing_email,
+                //     'reference' => $paymentReference,
+                //     'callback_url' => route('paystack.callback'),
+                // ]);
+
+                // // dd("Transactions", $transaction, $paymentUrl);
+
+                // return redirect()->to($paymentUrl);
+                
+                $data = array(
+                    "amount" => $amountToBePaid,
+                    "reference" => $paymentReference,
+                    "email" => $userData->billing_email,
+                    "currency" => "NGN"                
+                );
+            
+                return Paystack::getAuthorizationUrl($data)->redirectNow();
             }
-            foreach ($payment->getLinks() as $link) {
-                if ($link->getRel() == 'approval_url') {
-                    $redirect_url = $link->getHref();
-                    break;
-                }
-            }
-
-            $invoice_details = [];
-
-            $invoice_details['from_billing_name'] = $userData->billing_name;
-            $invoice_details['from_billing_address'] = $userData->billing_address;
-            $invoice_details['from_billing_city'] = $userData->billing_city;
-            $invoice_details['from_billing_state'] = $userData->billing_state;
-            $invoice_details['from_billing_zipcode'] = $userData->billing_zipcode;
-            $invoice_details['from_billing_country'] = $userData->billing_country;
-            $invoice_details['from_vat_number'] = $userData->vat_number;
-            $invoice_details['from_billing_phone'] = $userData->billing_phone;
-            $invoice_details['from_billing_email'] = $userData->billing_email;
-
-            $invoice_details['to_billing_name'] = $userData->billing_name;
-            $invoice_details['to_billing_address'] = $userData->billing_address;
-            $invoice_details['to_billing_city'] = $userData->billing_city;
-            $invoice_details['to_billing_state'] = $userData->billing_state;
-            $invoice_details['to_billing_zipcode'] = $userData->billing_zipcode;
-            $invoice_details['to_billing_country'] = $userData->billing_country;
-            $invoice_details['to_billing_phone'] = $userData->billing_phone;
-            $invoice_details['to_billing_email'] = $userData->billing_email;
-            $invoice_details['to_vat_number'] = $userData->vat_number;
-            $invoice_details['tax_name'] = $userData->tax_name;
-            $invoice_details['tax_type'] = $userData->tax_type;
-            $invoice_details['tax_value'] = $userData->tax_value;
-            $invoice_details['invoice_amount'] = $amountToBePaid;
-            $invoice_details['subtotal'] = $plan_details->plan_price;
-            // $invoice_details['tax_amount'] = (int)($plan_details->plan_price) * (int)($config[25]->config_value) / 100;
-            $taxPercentage = 0; // Replace with the appropriate tax percentage value or reference
-
-            $invoice_details['tax_amount'] = (int)($plan_details->plan_price) * (int)($taxPercentage) / 100;
-
-            // Store into Database before starting PayPal redirect
-            $transaction = new TransactionModel();
-            $transaction->gobiz_transaction_id = uniqid();
-            $transaction->transaction_date = now();
-            $transaction->transaction_id = $payment->getId();
-            $transaction->user_id = Auth::user()->id;
-            $transaction->plan_id = $plan_details->plan_id;
-            $transaction->desciption = $plan_details->plan_name . " Plan";
-            $transaction->payment_gateway_name = "PayPal";
-            $transaction->transaction_amount = $amountToBePaid;
-            // $transaction->transaction_currency = $config[1]->config_value;
-            $transaction_currency = 'NGN'; // Replace with the appropriate transaction currency value or reference
-            $transaction->transaction_currency = $transaction_currency;
-
-            $transaction->invoice_details = json_encode($invoice_details);
-            $transaction->payment_status = "PENDING";
-            $transaction->save();
-
-            /** add payment ID to session **/
-            \Session::put('paypal_payment_id', $payment->getId());
-            if (isset($redirect_url)) {
-                /** redirect to paypal **/
-                return Redirect::away($redirect_url);
-            }
-
-            \Session::put('error', 'Unknown error occurred');
-            alert()->error(trans("Payment failed, Something went wrong!"));
-            return redirect()->route('user.plans');
-        }
         } else {
             return redirect()->route('login');
+        }
+    }
+    public function handleCallback(Request $request)
+    {
+        $paymentReference = $request->query('reference');
+
+        if (!$paymentReference) {
+            return view('errors.404');
+        } else {
+            $config = DB::table('config')->get();
+            $transaction = Transaction::where('transaction_id', $paymentReference)->where('status', 1)->first();
+
+            $paymentDetails = Paystack::getPaymentData();
+
+            if ($paymentDetails['status'] === 'success') {
+                $transaction->payment_status = 'SUCCESS';
+                $transaction->save();
+
+                $user = User::find(Auth::user()->id);
+                $planData = Plan::where('plan_id', $transaction->plan_id)->first();
+                $termDays = $planData->validity;
+
+                // Update user plan and validity
+                if ($user->plan_validity === null) {
+                    $planValidity = Carbon::now();
+                    $planValidity->addDays($termDays);
+
+                    $invoiceCount = Transaction::where("invoice_prefix", $config[16]->config_value)->count();
+                    $invoiceCount = $invoiceCount + 1;
+                    $invoiceNumber = $config[16]->config_value . str_pad($invoiceCount, 4, '0', STR_PAD_LEFT);
+
+                    $user->plan_id = $transaction->plan_id;
+                    $user->plan_validity = $planValidity;
+                    $user->invoice_number = $invoiceNumber;
+                    $user->save();
+
+                    // Generate and send invoice
+                    $invoiceData = [
+                        'invoice_number' => $invoiceNumber,
+                        'transaction_id' => $transaction->transaction_id,
+                        'transaction_date' => $transaction->transaction_date,
+                        'user' => $user,
+                        'plan' => $planData,
+                        'term_days' => $termDays,
+                    ];
+
+                    Mail::to($user->email)->send(new InvoiceMail($invoiceData));
+                }
+
+                // Redirect user to success page
+                return redirect()->route('payment.success');
+            } else {
+                // Payment was not successful
+                $transaction->payment_status = 'FAILED';
+                $transaction->save();
+
+                // Redirect user to payment failed page
+                return redirect()->route('payment.failed');
+            }
         }
     }
 }

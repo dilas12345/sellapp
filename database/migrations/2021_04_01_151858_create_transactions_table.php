@@ -20,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->string('transaction_id');
             $table->string('user_id');
             $table->string('plan_id');
-            $table->longText('desciption');
+            $table->longText('description');
             $table->string('payment_gateway_name');
             $table->string('transaction_currency');
             $table->string('transaction_amount');

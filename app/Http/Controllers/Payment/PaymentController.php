@@ -57,6 +57,8 @@ class PaymentController extends Controller
                 return redirect()->route('paywithstripe', $planId);
             } else if ($payment_mode->payment_gateway_name == "Bank Transfer") {
                 return redirect()->route('paywithoffline', $planId);
+            } else if ($payment_mode->payment_gateway_name == "Paystack") {
+                return redirect()->route('paywithpaystack', $planId);
             } else {
                 alert()->error(trans('Something went wrong!'));
                 return redirect()->back();

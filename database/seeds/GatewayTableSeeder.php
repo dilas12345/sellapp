@@ -52,5 +52,15 @@ class GatewayTableSeeder extends Seeder
             "secret_key"  => "13",
             "is_status"  => "enabled"
         ]);
+
+        DB::table('gateways')->insert([
+            "payment_gateway_id" => "60964401751kg",
+            "payment_gateway_logo"  => "/backend/img/payment-method/IMG-1620460545.png",
+            "payment_gateway_name"  => "Paystack",
+            "display_name"  => "Paystack",
+            "client_id"  => "14",
+            "secret_key"  => "15",
+            "is_status"  => "enabled"
+        ]);
     }
 }
