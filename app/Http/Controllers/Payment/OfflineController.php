@@ -76,7 +76,7 @@ class OfflineController extends Controller
             $transaction->transaction_id = $request->transaction_id;
             $transaction->user_id = Auth::user()->id;
             $transaction->plan_id = $plan_details->plan_id;
-            $transaction->desciption = $plan_details->plan_name . " Plan";
+            $transaction->description = $plan_details->plan_name . " Plan";
             $transaction->payment_gateway_name = "Offline";
             $transaction->transaction_amount = $amountToBePaid;
             $transaction->transaction_currency = $config[1]->config_value;

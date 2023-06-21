@@ -178,7 +178,7 @@ Route::post('/prepare-payment/{planId}', 'Payment\PaymentController@preparePayme
 // Paystack Payment Gateway
 // Route::get('/payment-paystack/{planId}', 'Payment\PaystackController@paywithpaystack')->name('paywithpaystack');
 Route::get('/payment-paystack/{planId}', 'Payment\PaystackController@payWithPaystack')->name('paywithpaystack');
-Route::get('/payment-paystack/callback', 'Payment\PaystackController@handleCallback')->name('paystack.callback');
+Route::get('/payment-paystack/callback/{planId}', 'Payment\PaystackController@handleCallback')->name('paystack.callback');
 
 // PayPal Payment Gateway
 Route::get('/payment-paypal/{planId}', 'Payment\PaypalController@paywithpaypal')->name('paywithpaypal');

@@ -118,7 +118,7 @@ class TransactionsController extends Controller
         $transaction->transaction_id = uniqid();
         $transaction->user_id = Auth::user()->id;
         $transaction->plan_id = $selected_plan->plan_id;
-        $transaction->desciption = $selected_plan->plan_name . " Plan";
+        $transaction->description = $selected_plan->plan_name . " Plan";
         $transaction->payment_gateway_name = "FREE";
         $transaction->transaction_amount = $selected_plan->plan_price;
         // $transaction->transaction_currency = $config[1]->config_value;

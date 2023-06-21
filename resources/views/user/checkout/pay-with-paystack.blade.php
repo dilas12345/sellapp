@@ -21,8 +21,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">{{ $plan_details->plan_name }}</h3>
-                        <button id="rzp-button1" class="btn btn-primary">{{ __('Pay Now') }}</button>
+                        <h3 class="card-title">{{ $planDetails->plan_name }}</h3>
+                        <button id="paystack-button" class="btn btn-primary">{{ __('Pay Now') }}</button>
                         </p>
                     </div>
                 </div>
@@ -30,44 +30,33 @@
         </div>
         @include('user.includes.footer')
         @push('custom-js')
-            <script type="text/javascript" src="{{ asset('js/razorpay-checkout.js') }}"></script>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
             <script>
                 ! function() {
                     "use strict";
-                    var options = {
-                        "key": "{{ $config[6]->config_value }}",
-                        "amount": "{{ $order->amount }}",
-                        "currency": "{{ $order->currency }}",
-                        "name": "{{ env('APP_NAME') }}",
-                        "description": "Upgrade Package",
-                        "image": "{{ $settings->site_logo }}",
-                        "order_id": "{{ $order->id }}",
-                        "handler": function(response) {
-                            window.location = "../razorpay-payment-status/" + response.razorpay_order_id + "/" + response
-                                .razorpay_payment_id;
-                        },
-                        "prefill": {
-                            "name": "{{ Auth::user()->name }}",
-                            "email": "{{ Auth::user()->email }}",
-                            "contact": ""
-                        },
-                        "notes": {
-                            "gobiz_transaction_id": "{{ $gobiz_transaction_id }}"
-                        },
-                        "theme": {
-                            "color": "#613BBB"
-                        }
-                    };
-                    var rzp1 = new Razorpay(options);
-                    rzp1.on('payment.failed',
-                        function(response) {
-                            window.location = "../razorpay-payment-status/" + response.error.metadata.order_id + "/" + response
-                                .error
-                                .metadata.payment_id;
-                        });
-                    document.getElementById('rzp-button1').onclick = function(e) {
-                        rzp1.open();
+                    var paymentButton = document.getElementById('paystack-button');
+                    paymentButton.onclick = function(e) {
                         e.preventDefault();
+                        payWithPaystack();
+                    }
+
+                    function payWithPaystack() {
+                        var handler = PaystackPop.setup({
+                            key: "sk_test_beec010972a5e437c0a92c1ab56400473e1e0550",
+                            email: "{{ Auth::user()->email }}",
+                            amount: "{{ $amountToBePaidKobo ?? '' }}",
+                            currency: "{{ $currencyValue ?? '' }}",
+                            metadata: {
+                                planDetails: "{{ $planId ?? '' }}"
+                            },
+                            callback: function(response) {
+                                window.location = "/paystack-payment-status/" + response.reference;
+                            },
+                            onClose: function() {
+                                alert('Payment canceled');
+                            }
+                        });
+                        handler.openIframe();
                     }
                 }();
             </script>

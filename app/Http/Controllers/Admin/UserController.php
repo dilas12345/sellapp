@@ -175,7 +175,7 @@ class UserController extends Controller
             $transaction->transaction_id = "";
             $transaction->user_id = $user_details->id;
             $transaction->plan_id = $plan_data->plan_id;
-            $transaction->desciption = $plan_data->plan_name . " Plan";
+            $transaction->description = $plan_data->plan_name . " Plan";
             $transaction->payment_gateway_name = "Offline";
             $transaction->transaction_amount = $amountToBePaid;
             $transaction->invoice_prefix = $config[15]->config_value;
@@ -295,7 +295,7 @@ class UserController extends Controller
             $transaction->transaction_id = "";
             $transaction->user_id = $user_details->id;
             $transaction->plan_id = $plan_data->plan_id;
-            $transaction->desciption = $plan_data->plan_name . " Plan";
+            $transaction->description = $plan_data->plan_name . " Plan";
             $transaction->payment_gateway_name = "Offline";
             $transaction->transaction_amount = $amountToBePaid;
             $transaction->invoice_prefix = $config[15]->config_value;

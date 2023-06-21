@@ -653,7 +653,7 @@ CREATE TABLE `transactions` (
   `transaction_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `plan_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `desciption` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `payment_gateway_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `transaction_currency` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `transaction_amount` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,

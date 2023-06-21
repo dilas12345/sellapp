@@ -143,7 +143,7 @@
                             <tr>
                                 <td class="text-center">1</td>
                                 <td>
-                                    <p class="strong mb-1">{{ __('Extended') }} : {{ $transaction->desciption }}</p>
+                                    <p class="strong mb-1">{{ __('Extended') }} : {{ $transaction->description }}</p>
                                     <div class="text-muted">{{ __('Via') }} :
                                         {{ $transaction->payment_gateway_name }}</div>
                                 </td>

@@ -80,7 +80,7 @@ class RazorpayController extends Controller
                 $transaction->transaction_id = $order->id;
                 $transaction->user_id = Auth::user()->id;
                 $transaction->plan_id = $plan_details->plan_id;
-                $transaction->desciption = $plan_details->plan_name . " Plan";
+                $transaction->description = $plan_details->plan_name . " Plan";
                 $transaction->payment_gateway_name = "Razorpay";
                 $transaction->transaction_amount = $amountToBePaid;
                 $transaction->transaction_currency = $config[1]->config_value;
@@ -164,7 +164,7 @@ class RazorpayController extends Controller
                         'invoice_amount' => $encode['invoice_amount'],
                         'invoice_id' => $config[15]->config_value . $invoice_number,
                         'invoice_date' => $transaction_details->created_at,
-                        'description' => $transaction_details->desciption,
+                        'description' => $transaction_details->description,
                         'email_heading' => $config[27]->config_value,
                         'email_footer' => $config[28]->config_value,
                     ];
@@ -251,7 +251,7 @@ class RazorpayController extends Controller
                         'invoice_amount' => $encode['invoice_amount'],
                         'invoice_id' => $config[15]->config_value . $invoice_number,
                         'invoice_date' => $transaction_details->created_at,
-                        'description' => $transaction_details->desciption,
+                        'description' => $transaction_details->description,
                         'email_heading' => $config[27]->config_value,
                         'email_footer' => $config[28]->config_value,
                     ];

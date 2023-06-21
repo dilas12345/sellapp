@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Paystack;
 use App\Transaction as TransactionModel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use App\BusinessCard;
+use Carbon\Carbon;
 
 class PaystackController extends Controller
 {
@@ -86,27 +89,22 @@ class PaystackController extends Controller
                 $transaction->invoice_details = json_encode($invoice_details);
                 $transaction->payment_status = "PENDING";
                 $transaction->save();
-
-                // // dd("Amount to Pay", $amountToBePaid);
-                // $paymentUrl = Paystack::getAuthorizationUrl()->with([
-                //     'amount' => 700 * 100, //$amountToBePaid,
-                //     'email' => $userData->billing_email,
-                //     'reference' => $paymentReference,
-                //     'callback_url' => route('paystack.callback'),
-                // ]);
-
-                // // dd("Transactions", $transaction, $paymentUrl);
-
-                // return redirect()->to($paymentUrl);
                 
+                $callbackUrl = URL::route('paystack.callback', ['planId' => $planId]);
+
+                // dd($callbackUrl);
+
                 $data = array(
                     "amount" => $amountToBePaid,
                     "reference" => $paymentReference,
                     "email" => $userData->billing_email,
-                    "currency" => "NGN"                
+                    "currency" => "NGN",
+                    "callback_url" => $callbackUrl                
                 );
+
+                // dd("Data", $data);
             
-                return Paystack::getAuthorizationUrl($data)->redirectNow();
+                return Paystack::getAuthorizationUrl($data)->redirectNow('user.plans');
             }
         } else {
             return redirect()->route('login');
@@ -114,17 +112,23 @@ class PaystackController extends Controller
     }
     public function handleCallback(Request $request)
     {
+
+        // dd("Helloworld");
+
         $paymentReference = $request->query('reference');
 
         if (!$paymentReference) {
             return view('errors.404');
         } else {
+            $orderId = $paymentReference;
             $config = DB::table('config')->get();
             $transaction = Transaction::where('transaction_id', $paymentReference)->where('status', 1)->first();
 
             $paymentDetails = Paystack::getPaymentData();
 
-            if ($paymentDetails['status'] === 'success') {
+            // dd($paymentDetails);
+
+            if ($paymentDetails['status'] === true) {
                 $transaction->payment_status = 'SUCCESS';
                 $transaction->save();
 
@@ -137,6 +141,8 @@ class PaystackController extends Controller
                     $planValidity = Carbon::now();
                     $planValidity->addDays($termDays);
 
+                    $transaction = Transaction::where('transaction_id', $plan_data)->where('status', 1)->first();
+
                     $invoiceCount = Transaction::where("invoice_prefix", $config[16]->config_value)->count();
                     $invoiceCount = $invoiceCount + 1;
                     $invoiceNumber = $config[16]->config_value . str_pad($invoiceCount, 4, '0', STR_PAD_LEFT);
@@ -146,22 +152,147 @@ class PaystackController extends Controller
                     $user->invoice_number = $invoiceNumber;
                     $user->save();
 
+                    User::where('user_id', Auth::user()->user_id)->update([
+                        'plan_id' => $transaction->plan_id,
+                        'term' => $termDays,
+                        'plan_validity' => $planValidity,
+                        'plan_activation_date' => now(),
+                        'plan_details' => $planData
+                    ]);
+
+
+                    // $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+                    $index = 15; // The desired index in the $config array
+
+                    if (isset($config[$index])) {
+                        $invoice_prefix = $config[$index]->config_value;
+                        $invoice_count = Transaction::where("invoice_prefix", $invoice_prefix)->count();
+                    } else {
+                        // Handle the case when $config[15] is undefined
+                        // This could be an error message or alternative logic
+                        $invoice_count = 0; // Set a default value, or handle it as per your requirement
+                    }
+                    $invoice_number = $invoice_count + 1;
+
                     // Generate and send invoice
                     $invoiceData = [
                         'invoice_number' => $invoiceNumber,
                         'transaction_id' => $transaction->transaction_id,
                         'transaction_date' => $transaction->transaction_date,
+                        'invoice_number' => $invoice_number,
                         'user' => $user,
                         'plan' => $planData,
                         'term_days' => $termDays,
+                        'payment_status' => 'SUCCESS',
                     ];
 
                     Mail::to($user->email)->send(new InvoiceMail($invoiceData));
+
+                    alert()->success('Plan activated Successfully!');
+                    return redirect()->route('user.plans');
+                } else {
+                    $message = "";
+
+                    if ($user->plan_id == $transaction->plan_id) {
+
+                        // Check if plan validity is expired or not.
+                        $plan_validity = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $user->plan_validity);
+                        $current_date = Carbon::now();
+                        $remaining_days = $current_date->diffInDays($plan_validity, false);
+
+                        if ($remaining_days > 0) {
+                            $plan_validity = Carbon::parse($user->plan_validity);
+                            $plan_validity->addDays($termDays);
+                            $message = "Plan renewed successfully!";
+                        } else {
+                            $plan_validity = Carbon::now();
+                            $plan_validity->addDays($termDays);
+                            $message = "Plan renewed successfully!";
+                        }
+
+			            // Making all cards inactive, For Plan change
+                        BusinessCard::where('user_id', Auth::user()->user_id)->update([
+                            'card_status' => 'inactive',
+                        ]);
+                    } else {
+
+                        // Making all cards inactive, For Plan change
+                        BusinessCard::where('user_id', Auth::user()->user_id)->update([
+                            'card_status' => 'inactive',
+                        ]);
+
+                        $plan_validity = Carbon::now();
+                        $plan_validity->addDays($termDays);
+                        $message = "Plan activated successfully!";
+                    }
+
+                    // $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+                    $index = 15; // The desired index in the $config array
+
+                    if (isset($config[$index])) {
+                        $invoice_prefix = $config[$index]->config_value;
+                        $invoice_count = Transaction::where("invoice_prefix", $invoice_prefix)->count();
+                    } else {
+                        // Handle the case when $config[15] is undefined
+                        // This could be an error message or alternative logic
+                        $invoice_count = 0; // Set a default value, or handle it as per your requirement
+                    }
+                    $invoice_number = $invoice_count + 1;
+
+                    Transaction::where('transaction_id', $orderId)->update([
+                        'transaction_id' => $paymentReference,
+                        // 'invoice_prefix' => $config[15]->config_value,
+                        'invoice_number' => $invoice_number,
+                        'payment_status' => 'SUCCESS',
+                    ]);
+
+                    User::where('user_id', Auth::user()->user_id)->update([
+                        'plan_id' => $transaction->plan_id,
+                        'term' => $termDays,
+                        'plan_validity' => $plan_validity,
+                        'plan_activation_date' => now(),
+                        'plan_details' => $planData
+                    ]);
+
+                    $encode = json_decode($transaction['invoice_details'], true);
+                    // dd("Hello Che", $encode);
+                    // $details = [
+                    //     'from_billing_name' => $encode['from_billing_name'],
+                    //     'from_billing_email' => $encode['from_billing_email'],
+                    //     'from_billing_address' => $encode['from_billing_address'],
+                    //     'from_billing_city' => $encode['from_billing_city'],
+                    //     'from_billing_state' => $encode['from_billing_state'],
+                    //     'from_billing_country' => $encode['from_billing_country'],
+                    //     'from_billing_zipcode' => $encode['from_billing_zipcode'],
+                    //     'gobiz_transaction_id' => $transaction->gobiz_transaction_id,
+                    //     'to_billing_name' => $encode['to_billing_name'],
+                    //     'invoice_currency' => $transaction->transaction_currency,
+                    //     'subtotal' => $encode['subtotal'],
+			        //     'tax_amount' => $encode['tax_amount'],
+                    //     'invoice_amount' => $encode['invoice_amount'],
+                    //     'invoice_id' => $config[15]->config_value . $invoice_number,
+                    //     'invoice_date' => $transaction->created_at,
+                    //     'description' => $transaction->description,
+                    //     'email_heading' => $config[27]->config_value,
+                    //     'email_footer' => $config[28]->config_value,
+                    // ];
+
+                    // try {
+                    //     Mail::to($encode['to_billing_email'])->send(new \App\Mail\SendEmailInvoice($details));
+                    // } catch (\Exception $e) {
+
+                    // }
+
+                    alert()->success($message);
+                    return redirect()->route('user.plans');
                 }
 
                 // Redirect user to success page
-                return redirect()->route('payment.success');
+                // return redirect()->route('payment.success');
+                    // alert()->success('Plan activated Successfully!');
+                    // return redirect()->route('user.plans');
             } else {
+
                 // Payment was not successful
                 $transaction->payment_status = 'FAILED';
                 $transaction->save();
