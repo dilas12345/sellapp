@@ -221,7 +221,7 @@
         @else
         <div class="my-4 mt-12">
             <p class="mb-2 text-center text-base text-white">{{ __('Copyright') }} &copy; <span id="year"></span>. <a
-                    href="{{ url('/') }}">{{ config('app.name') }} {{ __('WhatsApp Store')}}</a></p>
+                    href="{{ url('/') }}">{{ config('app.name') }} {{ __('E-commerce Store')}}</a></p>
         </div>
         @endif
     </div>

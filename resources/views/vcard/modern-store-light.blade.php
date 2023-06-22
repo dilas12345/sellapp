@@ -70,7 +70,7 @@
                     <div class="pt-6 p-3">
                         <a onclick="placeOrder()" id="place-order"
                             class="block px-4 py-3 mb-3 rounded text-white text-md text-center font-semibold bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 ">{{
-                            __('Place WhatsApp Order') }}</a>
+                            __('Place Order') }}</a>
                     </div>
 
                     <div id="empty-cart" class="pt-6 p-3">
@@ -221,7 +221,7 @@
         @else
         <div class="my-4 mt-12">
             <p class="mb-2 text-center text-base text-gray-500">{{ __('Copyright') }} &copy; <span id="year"></span>. <a
-                    href="{{ url('/') }}">{{ config('app.name') }} {{ __('WhatsApp Store')}}</a></p>
+                    href="{{ url('/') }}">{{ config('app.name') }} {{ __('E-commerce Store')}}</a></p>
         </div>
         @endif
     </div>

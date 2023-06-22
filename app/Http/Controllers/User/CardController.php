@@ -205,11 +205,26 @@ class CardController extends Controller
                     $business_name = $card_details->title;
                     $profile = URL::to('/') . "/" . $business_card_details->profile;
 
-                    $shareContent = $config[30]->config_value;
+                    // $shareContent = $config[30]->config_value;
+                    $shareContent = ''; // Initialize $shareContent with an empty string or appropriate default value
+
+                    if (isset($config[30])) {
+                        $shareContent = $config[30]->config_value;
+                        // Rest of your code using $shareContent
+                    } else {
+                        // Handle the case when the key does not exist
+                        // You can set a default value or display an error message
+                    }
                     $shareContent = str_replace("{ business_name }", $business_name, $shareContent);
                     $shareContent = str_replace("{ business_url }", $url, $shareContent);
-                    $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
-
+                    // $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                    if (isset($config[0])) {
+                        $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                    } else {
+                        // Handle the case when the key does not exist
+                        // You can set a default value or display an error message
+                    }
+                    
                     // If branding enabled, then show app name.
 
                     if ($plan_details['hide_branding'] == "1") {

@@ -21,7 +21,7 @@ class StoreController extends Controller
     // Create Store
     public function CreateStore()
     {
-        $themes = Theme::where('theme_description', 'WhatsApp Store')->where('status', 1)->get();
+        $themes = Theme::where('theme_description', 'E-commerce Store')->where('status', 1)->get();
         $settings = Setting::where('status', 1)->first();
         $cards = BusinessCard::where('user_id', Auth::user()->user_id)->where('card_status', 'activated')->count();
 

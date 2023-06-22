@@ -11,7 +11,7 @@
                         {{ __('Overview') }}
                     </div>
                     <h2 class="page-title">
-                        {{ __('Create New WhatsApp Store') }}
+                        {{ __('Create New E-commerce Store') }}
                     </h2>
                 </div>
             </div>

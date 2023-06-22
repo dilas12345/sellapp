@@ -39,7 +39,7 @@
                                                         {{ __('vCard Only') }}</option>
                                                     <option value="STORE"
                                                         {{ env('APP_TYPE') == 'STORE' ? ' selected' : '' }}>
-                                                        {{ __('WhatsApp Store Only') }}</option>
+                                                        {{ __('E-commerce Store Only') }}</option>
                                                     <option value="BOTH"
                                                         {{ env('APP_TYPE') == 'BOTH' ? ' selected' : '' }}>
                                                         {{ __('Both') }}</option>

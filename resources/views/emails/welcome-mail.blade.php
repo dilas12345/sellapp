@@ -478,7 +478,7 @@
                                             </p>
                                             <p>{{ __('Simply go here') }} <a
                                                     href="{{ ENV('APP_URL') }}/login">{{ ENV('APP_NAME') }}</a> {{ __('to get
-                                                started create a vCard or WhatsApp store today.') }}</p>
+                                                started create a Web Landing page or Ecommerce store today.') }}</p>
 
 
                                             <p>{{ __('Have a great day!') }}</p>
