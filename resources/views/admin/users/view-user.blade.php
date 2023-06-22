@@ -94,7 +94,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-center font-weight-bold" colspan="6">
-                                            {{ __('No business cards found') }}!
+                                            {{ __('No business found') }}!
                                         </td>
                                     </tr>
                                     @endif

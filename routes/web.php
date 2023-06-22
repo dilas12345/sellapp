@@ -84,7 +84,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 
 Route::group(['as' => 'user.', 'prefix' => 'user', 'namespace' => 'User', 'middleware' => ['auth', 'user'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    // Business Cards
+    // Business Sites
     Route::get('cards', 'CardController@cards')->name('cards');
     Route::get('card-status/{id}', 'CardController@cardStatus')->name('card.status');
     // Business Plans

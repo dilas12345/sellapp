@@ -44,7 +44,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="subheader">{{ __('Business Cards') }}</div>
+                                <div class="subheader">{{ __('Business') }}</div>
                             </div>
                             <div class="h1">{{ $business_card == 999 ? __('Unlimited') : $business_card }}</div>
                             <a class="btn btn-sm btn-white" href="{{ route('user.cards') }}">

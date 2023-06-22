@@ -11,7 +11,7 @@
                         {{ __('Overview') }}
                     </div>
                     <h2 class="page-title">
-                        {{ __('Business Cards') }}
+                        {{ __('Business') }}
                     </h2>
                 </div>
 
