@@ -256,32 +256,34 @@ class PaystackController extends Controller
 
                     $encode = json_decode($transaction['invoice_details'], true);
                     // dd("Hello Che", $encode);
-                    // $details = [
-                    //     'from_billing_name' => $encode['from_billing_name'],
-                    //     'from_billing_email' => $encode['from_billing_email'],
-                    //     'from_billing_address' => $encode['from_billing_address'],
-                    //     'from_billing_city' => $encode['from_billing_city'],
-                    //     'from_billing_state' => $encode['from_billing_state'],
-                    //     'from_billing_country' => $encode['from_billing_country'],
-                    //     'from_billing_zipcode' => $encode['from_billing_zipcode'],
-                    //     'gobiz_transaction_id' => $transaction->gobiz_transaction_id,
-                    //     'to_billing_name' => $encode['to_billing_name'],
-                    //     'invoice_currency' => $transaction->transaction_currency,
-                    //     'subtotal' => $encode['subtotal'],
-			        //     'tax_amount' => $encode['tax_amount'],
-                    //     'invoice_amount' => $encode['invoice_amount'],
-                    //     'invoice_id' => $config[15]->config_value . $invoice_number,
-                    //     'invoice_date' => $transaction->created_at,
-                    //     'description' => $transaction->description,
-                    //     'email_heading' => $config[27]->config_value,
-                    //     'email_footer' => $config[28]->config_value,
-                    // ];
+                    
+                    $details = [
+                        'from_billing_name' => $encode['from_billing_name'],
+                        'from_billing_email' => $encode['from_billing_email'],
+                        'from_billing_address' => $encode['from_billing_address'],
+                        'from_billing_city' => $encode['from_billing_city'],
+                        'from_billing_state' => $encode['from_billing_state'],
+                        'from_billing_country' => $encode['from_billing_country'],
+                        'from_billing_zipcode' => $encode['from_billing_zipcode'],
+                        'gobiz_transaction_id' => $transaction->gobiz_transaction_id,
+                        'to_billing_name' => $encode['to_billing_name'],
+                        'invoice_currency' => $transaction->transaction_currency,
+                        'subtotal' => $encode['subtotal'],
+			            'tax_amount' => $encode['tax_amount'],
+                        'invoice_amount' => $encode['invoice_amount'],
+                        // 'invoice_id' => $config[15]->config_value . $invoice_number,
+                        'invoice_id' => $encode['invoice_id'],
+                        'invoice_date' => $transaction->created_at,
+                        'description' => $transaction->description,
+                        'email_heading' => $config[27]->config_value,
+                        'email_footer' => $config[28]->config_value,
+                    ];
 
-                    // try {
-                    //     Mail::to($encode['to_billing_email'])->send(new \App\Mail\SendEmailInvoice($details));
-                    // } catch (\Exception $e) {
+                    try {
+                        Mail::to($encode['to_billing_email'])->send(new \App\Mail\SendEmailInvoice($details));
+                    } catch (\Exception $e) {
 
-                    // }
+                    }
 
                     alert()->success($message);
                     return redirect()->route('user.plans');
