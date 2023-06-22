@@ -275,8 +275,8 @@ class PaystackController extends Controller
                         'invoice_id' => $encode['invoice_id'],
                         'invoice_date' => $transaction->created_at,
                         'description' => $transaction->description,
-                        'email_heading' => $config[27]->config_value,
-                        'email_footer' => $config[28]->config_value,
+                        'email_heading' => '',
+                        'email_footer' => '',
                     ];
 
                     try {
