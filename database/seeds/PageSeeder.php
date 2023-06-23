@@ -18,14 +18,14 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'banner',
             'section_title' => 'banner_title',
-            'section_content' => 'Create your Digital Business Card'
+            'section_content' => 'Create your Digital Business Setup'
         ]);
 
         DB::table('pages')->insert([
             'page_name' => 'home',
             'section_name' => 'banner',
             'section_title' => 'banner_description',
-            'section_content' => 'SellApp is a Digital Business Card Maker. You can create your own digital vcard to attract your customers.'
+            'section_content' => 'SellApp is a Digital Business Setup Maker. You can create your own digital vcard to attract your customers.'
         ]);
 
         DB::table('pages')->insert([
@@ -75,14 +75,14 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'works',
             'section_title' => 'work_description',
-            'section_content' => 'Register a new account, create your own digital business card, share your unique link and get more customers.'
+            'section_content' => 'Register a new account, create your own digital business Setup, share your unique link and get more customers.'
         ]);
 
         DB::table('pages')->insert([
             'page_name' => 'home',
             'section_name' => 'works',
             'section_title' => 'work_li_title_1',
-            'section_content' => 'Create business card'
+            'section_content' => 'Create business Setup'
         ]);
 
         DB::table('pages')->insert([
@@ -110,7 +110,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'works',
             'section_title' => 'work_card_description_1',
-            'section_content' => 'You can show case your product images on your business card.'
+            'section_content' => 'You can show case your product images on your business Setup.'
         ]);
 
         DB::table('pages')->insert([
@@ -160,7 +160,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_mini_title',
-            'section_content' => 'Why Digital Business Card?'
+            'section_content' => 'Why Digital Business Setup?'
         ]);
 
         DB::table('pages')->insert([
@@ -181,7 +181,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_card_description_1',
-            'section_content' => 'You can enable and disable WhatsApp Chat Feature in your digital business card.'
+            'section_content' => 'You can enable and disable WhatsApp Chat Feature in your digital business Setup.'
         ]);
 
         DB::table('pages')->insert([
@@ -223,7 +223,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_card_description_4',
-            'section_content' => 'You can list your all accepted payment methods in your digital business card.'
+            'section_content' => 'You can list your all accepted payment methods in your digital business setup.'
         ]);
 
         DB::table('pages')->insert([
@@ -251,7 +251,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_card_description_6',
-            'section_content' => 'You can integrate your Google Business Link with your digital business card.'
+            'section_content' => 'You can integrate your Google Business Link with your digital business setup.'
         ]);
 
         DB::table('pages')->insert([
@@ -279,7 +279,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_card_description_8',
-            'section_content' => 'Your all social media presence in one digital business card. Stay connect with your customers.'
+            'section_content' => 'Your all social media presence in one digital business setup. Stay connect with your customers.'
         ]);
 
         DB::table('pages')->insert([
@@ -335,7 +335,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'features',
             'section_title' => 'feature_card_description_12',
-            'section_content' => 'Your name or business whatever it is. You can generate your business card link as per your choice.'
+            'section_content' => 'Your name or business whatever it is. You can generate your business setup link as per your choice.'
         ]);
 
         // Pricing

@@ -224,7 +224,7 @@ class CardController extends Controller
                         // Handle the case when the key does not exist
                         // You can set a default value or display an error message
                     }
-                    
+
                     // If branding enabled, then show app name.
 
                     if ($plan_details['hide_branding'] == "1") {
@@ -360,7 +360,7 @@ class CardController extends Controller
                     $card->description = $request->description;
                     $card->save();
 
-                    alert()->success(trans('New Business Card Created Successfully!'));
+                    alert()->success(trans('New Business Setup Created Successfully!'));
                     return redirect()->route('user.social.links', $card_id);
                 } catch (\Exception $th) {
                     alert()->error(trans('Sorry, personalized link was already registered.'));
@@ -679,7 +679,7 @@ class CardController extends Controller
             $businessHours->is_always_open = $always_open;
             $businessHours->is_display = $is_display;
             $businessHours->save();
-            alert()->success(trans('Your Business Card is Ready.'));
+            alert()->success(trans('Your Business Setup is Ready.'));
             return redirect()->route('user.cards');
         }
     }
@@ -687,7 +687,7 @@ class CardController extends Controller
     // Skip business hours
     public function skipAndSave()
     {
-        alert()->success(trans('Your Business Card is Ready.'));
+        alert()->success(trans('Your Business Setup is Ready.'));
         return redirect()->route('user.cards');
     }
 
@@ -722,7 +722,7 @@ class CardController extends Controller
                             BusinessCard::where('user_id', Auth::user()->user_id)->where('card_id', $id)->update([
                                 'card_status' => 'activated',
                             ]);
-                            alert()->success(trans('Your Business Card Enabled'));
+                            alert()->success(trans('Your Business Setup Enabled'));
                             return redirect()->route('user.cards');
                         } else {
                             alert()->error(trans('Maximum card creation limit is exceeded, Please upgrade your plan.'));
@@ -745,7 +745,7 @@ class CardController extends Controller
                     BusinessCard::where('user_id', Auth::user()->user_id)->where('card_id', $id)->update([
                         'card_status' => 'inactive',
                     ]);
-                    alert()->success(trans('Your Business Card Disabled'));
+                    alert()->success(trans('Your Business Setup Disabled'));
                     return redirect()->route('user.cards');
                 }
             }

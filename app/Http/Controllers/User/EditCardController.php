@@ -666,7 +666,7 @@ class EditCardController extends Controller
                 ]);
             }
 
-            alert()->success(trans('Your business card is updated!'));
+            alert()->success(trans('Your business Setup is updated!'));
             return redirect()->route('user.cards');
         }
     }
@@ -694,7 +694,7 @@ class EditCardController extends Controller
             $businessHours->is_always_open = $always_open;
             $businessHours->is_display = 1;
             $businessHours->save();
-            alert()->success(trans('Your business card is updated!'));
+            alert()->success(trans('Your business Setup is updated!'));
             return redirect()->route('user.cards');
         }
     }
