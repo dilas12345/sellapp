@@ -73,7 +73,7 @@
                                                         ({{ __('For forever, enter 9999') }})</span></label>
                                                 <input type="number" class="form-control" name="validity" min="1" max="9999"
                                                     placeholder="{{ __('Validity') }}..."
-                                                    value="{{ $config[8]->config_value == 'monthly' ? 31 : 365 }}"
+                                                    value="{{ isset($config[8]) && $config[8]->config_value == 'monthly' ? 31 : 365 }}"
                                                     required>
                                             </div>
                                         </div>
