@@ -152,7 +152,7 @@ class PageSeeder extends Seeder
             'page_name' => 'home',
             'section_name' => 'works',
             'section_title' => 'work_card_description_4',
-            'section_content' => 'SellApp Digital Business cards will help you to transform your card visitors into customers.'
+            'section_content' => 'SellApp Digital Business will help you to transform your card visitors into customers.'
         ]);
 
         // Features

@@ -56,7 +56,7 @@
                                                 @if ($plan_data['plan_price'] == '0')
                                                 ({{ __('Free') }})
                                                 @else
-                                                ({{ $config[1]->config_value}}
+                                                ( ₦
                                                 {{ $plan_data['plan_price'] }})
                                                 @endif
                                             </span>

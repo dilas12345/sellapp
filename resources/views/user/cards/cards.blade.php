@@ -142,7 +142,7 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td>{{ __('No Business Cards Found.') }}</td>
+                                        <td>{{ __('No Business Found.') }}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>

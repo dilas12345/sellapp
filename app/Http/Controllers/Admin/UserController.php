@@ -126,7 +126,14 @@ class UserController extends Controller
         $plan_data = Plan::where('plan_id', $request->plan_id)->first();
         $term_days = $plan_data->validity;
 
-        $amountToBePaid = ((int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100) + (int)($plan_data->plan_price);
+        // $amountToBePaid = ((int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100) + (int)($plan_data->plan_price);
+        $amountToBePaid = "";
+        if (isset($config[25])) {
+            $amountToBePaid = ((int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100) + (int)($plan_data->plan_price);
+        } else {
+            // Handle the case when the key does not exist
+            // You can set a default value or display an error message
+        }
 
         if ($user_details->plan_validity == "") {
 
@@ -250,12 +257,22 @@ class UserController extends Controller
                 $message = "Plan changed successfully!";
             }
 
-            $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+            // $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+            $invoice_count = '';
+            if (isset($config[15])) {
+                $invoice_count = Transaction::where("invoice_prefix", $config[15]->config_value)->count();
+            } else {
+                // Handle the case when the key does not exist
+                // You can set a default value or display an error message
+            }
+
             //remember to fall back to the one below!!
             // $invoice_prefix = $config->where('config_key', 'invoice_prefix')->first()->config_value;
             // $invoice_count = Transaction::where('invoice_prefix', $invoice_prefix)->count();
 
-            $invoice_number = $invoice_count + 1;
+            // $invoice_number = $invoice_count + 1;
+            $invoice_number = intval($invoice_count) + 1;
+
 
             $gobiz_transaction_id = uniqid();
 
@@ -286,7 +303,15 @@ class UserController extends Controller
 
             $invoice_details['invoice_amount'] = $amountToBePaid;
             $invoice_details['subtotal'] = $plan_data->plan_price;
-            $invoice_details['tax_amount'] = (int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100;
+            // $invoice_details['tax_amount'] = (int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100;
+            $invoice_details['tax_amount'] = 0; // Set a default value or handle the case when the key is undefined
+
+            if (isset($config[25])) {
+                $invoice_details['tax_amount'] = (int)($plan_data->plan_price) * (int)($config[25]->config_value) / 100;
+            } else {
+                // Handle the case when the key does not exist
+                // You can set a default value or display an error message
+            }
 
             // If order is created from stripe
             $transaction = new Transaction();
@@ -298,7 +323,16 @@ class UserController extends Controller
             $transaction->description = $plan_data->plan_name . " Plan";
             $transaction->payment_gateway_name = "Offline";
             $transaction->transaction_amount = $amountToBePaid;
-            $transaction->invoice_prefix = $config[15]->config_value;
+            // $transaction->invoice_prefix = $config[15]->config_value;
+            $transaction->invoice_prefix = ''; // Set a default value or handle the case when the key is undefined
+
+            if (isset($config[15])) {
+                $transaction->invoice_prefix = $config[15]->config_value;
+            } else {
+                // Handle the case when the key does not exist
+                // You can set a default value or display an error message
+            }
+            
             $transaction->invoice_number = $invoice_number;
             // $transaction->transaction_currency = $config[1]->config_value;
             $transaction_currency = $config->where('config_key', 'transaction_currency')->first();
@@ -323,23 +357,43 @@ class UserController extends Controller
                 'plan_details' => $plan_data
             ]);
 
+            // dd($user_details);
+            $email_heading = ''; // Set a default value or handle the case when the key is undefined
+
+            if (isset($config[27])) {
+                $email_heading = $config[27]->config_value;
+            } else {
+                // Handle the case when the key does not exist
+                // You can set a default value or display an error message
+            }
+
+            $email_footer = ''; // Set a default value or handle the case when the key is undefined
+
+            if (isset($config[28])) {
+                $email_footer = $config[28]->config_value;
+            } else {
+                // Handle the case when the key does not exist
+                // You can set a default value or display an error message
+            }
             $details = [
-                'from_billing_name' => $config[16]->config_value,
-                'from_billing_email' => $config[17]->config_value,
-                'from_billing_address' => $config[19]->config_value,
-                'from_billing_city' => $config[20]->config_value,
-                'from_billing_state' => $config[21]->config_value,
-                'from_billing_country' => $config[23]->config_value,
-                'from_billing_zipcode' => $config[22]->config_value,
+                'from_billing_name' => $user_details->billing_name,
+                'from_billing_email' => $user_details->billing_email,
+                'from_billing_address' => $user_details->billing_address,
+                'from_billing_city' => $user_details->billing_city,
+                'from_billing_state' => $user_details->billing_state,
+                'from_billing_country' => $user_details->billing_country,
+                'from_billing_zipcode' => $user_details->billing_zipcode,
+
                 'gobiz_transaction_id' => $gobiz_transaction_id,
                 'to_billing_name' => $user_details->billing_name,
-                'invoice_currency' => $config[1]->config_value,
+                'invoice_currency' => $config[1]->config_value ?? 'NGN',
                 'invoice_amount' => $plan_data->plan_price,
-                'invoice_id' => $config[15]->config_value . $invoice_number,
+                'invoice_id' => $user_details['id'] . $invoice_number,
                 'invoice_date' => Carbon::now(),
                 'description' => $plan_data->plan_name . ' plan Upgrade',
-                'email_heading' => $config[27]->config_value,
-                'email_footer' => $config[28]->config_value,
+                'email_heading' => $email_heading,
+                
+                'email_footer' => $email_footer,
             ];
 
             try {
