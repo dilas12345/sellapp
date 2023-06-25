@@ -34,7 +34,7 @@
                                 </svg>
                             </span>
                             <span class="nav-link-title">
-                                {{ __('Business') }}
+                                {{ __('Create Business') }}
                             </span>
                         </a>
                     </li>

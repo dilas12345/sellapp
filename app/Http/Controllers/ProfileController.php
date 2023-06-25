@@ -172,16 +172,29 @@ class ProfileController extends Controller
                         $business_name = $card_details->title;
                         $profile = URL::to('/') . "/" . $business_card_details->cover;
 
-                        $shareContent = $config[30]->config_value;
+                        // $shareContent = $config[30]->config_value;
+                        $shareContent = '';
+                        if (isset($config[30])) {
+                            $shareContent = $config[30]->config_value;
+                            // Rest of your code
+                        } else {
+                            // Handle the case when the key doesn't exist
+                        }
                         $shareContent = str_replace("{ business_name }", $business_name, $shareContent);
                         $shareContent = str_replace("{ business_url }", $url, $shareContent);
 
                         // If branding enabled, then show app name.
 
+                        // if ($plan_details['hide_branding'] == "1") {
+                        //     $shareContent = str_replace("{ appName }", $business_name, $shareContent);
+                        // } else {
+                        //     $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                        // }
                         if ($plan_details['hide_branding'] == "1") {
                             $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                         } else {
-                            $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                            // Set a default value or an alternative value for $shareContent
+                            $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                         }
 
                         $url = urlencode($url);
