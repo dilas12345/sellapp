@@ -204,7 +204,7 @@
                             </tr>
                         </table>
                         <p class="text-muted text-center mt-5">
-                            {{ $config[29]->config_value }}
+                            Thank you very much for doing business with us. We look forward to working with you again!
                         </p>
                     </div>
                 </div>

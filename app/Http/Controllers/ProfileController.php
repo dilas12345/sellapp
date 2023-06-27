@@ -89,7 +89,7 @@ class ProfileController extends Controller
                         $shareContent = str_replace("{ business_url }", $url, $shareContent);
                         // $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
                         if (isset($config[0])) {
-                            $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                            $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                         } else {
                             // Handle the case when the key does not exist
                             // You can set a default value or display an error message
@@ -100,7 +100,7 @@ class ProfileController extends Controller
                         if ($plan_details['hide_branding'] == "1") {
                             $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                         } else {
-                            $shareContent = str_replace("{ appName }", $config[0]->config_value, $shareContent);
+                            $shareContent = str_replace("{ appName }", $business_name, $shareContent);
                         }
 
                         $url = urlencode($url);
