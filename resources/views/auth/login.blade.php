@@ -16,6 +16,10 @@
                         <h3 class="text-2xl font-bold">{{ __('Sign in your account') }}</h3>
                     </div>
 
+                    <div id="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    
                     @error('email')
                     <span class="ml-3 invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

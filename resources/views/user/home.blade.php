@@ -18,6 +18,9 @@
             </div>
         </div>
     </div>
+    <div id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-deck row-cards">
