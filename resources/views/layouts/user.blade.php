@@ -47,30 +47,6 @@
     <script type="text/javascript" src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('backend/js/datatable.js') }}"></script>
     <script type="text/javascript" src="{{ asset('backend/js/jquery-qrcode.min.js') }}"></script>
-    <script type="text/javascript" >
-        // Import Axios if not already imported
-        import axios from 'axios';
-
-        // Add an interceptor to show/hide the spinner for each request
-        axios.interceptors.request.use(config => {
-        // Show the spinner
-        document.getElementById('loading-spinner').style.display = 'block';
-        return config;
-        }, error => {
-        return Promise.reject(error);
-        });
-
-        axios.interceptors.response.use(response => {
-        // Hide the spinner
-        document.getElementById('loading-spinner').style.display = 'none';
-        return response;
-        }, error => {
-        // Hide the spinner
-        document.getElementById('loading-spinner').style.display = 'none';
-        return Promise.reject(error);
-        });
-
-    </script>
     @endif
     @yield('scripts')
     @stack('custom-js')

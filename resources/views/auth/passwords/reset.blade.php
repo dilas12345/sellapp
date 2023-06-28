@@ -79,18 +79,19 @@
 
                         <div class="px-3 text-center">
                             <button type="submit"
-                                class="mb-2 w-full py-4 bg-{{ $config[11]->config_value }}-600 hover:bg-{{ $config[11]->config_value }}-700 rounded text-sm font-bold text-gray-50 transition duration-200">{{ __('Reset Password') }}</button>
+                                class="mb-2 w-full py-4 bg-blue-600 hover:bg-gray-700 rounded text-sm font-bold text-gray-50 transition duration-200">{{ __('Reset Password') }}</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="hidden lg:block relative w-full lg:w-1/2 bg-{{ $config[11]->config_value }}-600">
+        <div class="hidden lg:block relative w-full lg:w-1/2 bg-slate-600">
             <div class="absolute bottom-0 inset-x-0 mx-auto mb-12 max-w-xl text-center authentication">
-                <img class="lg:max-w-xl mx-auto" src="{{ asset($config[13]->config_value) }}" alt="{{ $config[0]->config_value }}">
-
+                <img class="lg:max-w-xl mx-auto" src="{{ asset('../../frontend/assets/register.svg') }}"
+                    alt="{{'images'}}">
             </div>
         </div>
+
 
     </div>
 </section>

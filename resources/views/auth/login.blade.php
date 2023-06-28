@@ -116,5 +116,34 @@ function mouseoutPass(obj) {
     obj.type = "password";
 }
 </script>
+<script>
+    // Select the spinner element
+    const spinner = document.getElementById('loading-spinner');
+
+    // Show the spinner when making a request
+    function showSpinner() {
+    spinner.style.display = 'block';
+    }
+
+    // Hide the spinner when the request is complete
+    function hideSpinner() {
+    spinner.style.display = 'none';
+    }
+
+    // Make an AJAX request
+    function makeRequest(url, options) {
+    showSpinner();
+    fetch(url, options)
+        .then(response => {
+        hideSpinner();
+        return response;
+        })
+        .catch(error => {
+        hideSpinner();
+        throw error;
+        });
+    }
+
+</script>
 @endpush
 @endsection

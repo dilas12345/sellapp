@@ -18,8 +18,8 @@
             </div>
         </div>
     </div>
-    <div id="loading-spinner">
-        <div class="spinner"></div>
+    <div id="loading-spinner" style="display: none;">
+        <!-- Your spinner HTML or image goes here -->
     </div>
     <div class="page-body">
         <div class="container-xl">
@@ -76,6 +76,33 @@
             </div>
         </div>
     </div>
+    <script>
+        // Display the loading spinner when an AJAX request starts
+        $(document).ajaxStart(function () {
+            $('#loading-spinner').show();
+        });
+
+        // Hide the loading spinner when an AJAX request completes, regardless of success or failure
+        $(document).ajaxStop(function () {
+            $('#loading-spinner').hide();
+        });
+    </script>
+    <!-- <script>
+        $.ajax({
+            url: 'sellapp.com.ng',
+            type: 'POST',
+            data: {
+                // Your data to send with the request
+            },
+            success: function (response) {
+                // Handle the successful response
+            },
+            error: function (xhr, status, error) {
+                // Handle the error
+            }
+        });
+
+    </script> -->
     @include('user.includes.footer')
 </div>
 @endsection
