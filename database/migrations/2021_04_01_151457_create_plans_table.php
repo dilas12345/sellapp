@@ -21,6 +21,7 @@ class CreatePlansTable extends Migration
             $table->string('plan_price');
             $table->string('validity');
             $table->string('no_of_vcards');
+            $table->string('no_of_portfolios');
             $table->integer('no_of_services');
             $table->integer('no_of_galleries');
             $table->integer('no_of_features');

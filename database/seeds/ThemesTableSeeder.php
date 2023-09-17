@@ -37,6 +37,30 @@ class ThemesTableSeeder extends Seeder
         ]);
 
         DB::table('themes')->insert([
+            "theme_id" => "7ccc432a06caa",
+            "theme_name" => "Modern vCard Light",
+            "theme_description" => "Portfolio page",
+            "theme_thumbnail" => "modern-light.png",
+            "theme_price" => "Free"
+        ]);
+
+        DB::table('themes')->insert([
+            "theme_id" => "7ccc432a06vta",
+            "theme_name" => "Modern vCard Dark",
+            "theme_description" => "Portfolio page",
+            "theme_thumbnail" => "modern-dark.png",
+            "theme_price" => "Free"
+        ]);
+
+        DB::table('themes')->insert([
+            "theme_id" => "7ccc432a06cth",
+            "theme_name" => "Classic vCard Light",
+            "theme_description" => "Portfolio page",
+            "theme_thumbnail" => "classic-light.png",
+            "theme_price" => "Free"
+        ]);
+
+        DB::table('themes')->insert([
             "theme_id" => "7ccc432a06vyw",
             "theme_name" => "Classic vCard Dark",
             "theme_description" => "Web-landing page",
@@ -73,6 +97,14 @@ class ThemesTableSeeder extends Seeder
             "theme_name" => "Modern Store Dark",
             "theme_description" => "E-commerce Store",
             "theme_thumbnail" => "modern-store-dark.png",
+            "theme_price" => "Free"
+        ]);
+
+        DB::table('themes')->insert([
+            "theme_id" => "7ccc432a06vho",
+            "theme_name" => "Portfolio light",
+            "theme_description" => "Portfolio page",
+            "theme_thumbnail" => "classic-portfolio-light.png",
             "theme_price" => "Free"
         ]);
     }

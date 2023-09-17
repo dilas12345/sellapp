@@ -223,6 +223,8 @@ class ProfileController extends Controller
                             return view('vcard.metro-vcard-light', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                         } else if ($card_details->theme_id == "7ccc432a06vhd") {
                             return view('vcard.metro-vcard-dark', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        } else if ($card_details->theme_id == "7ccc432a06vho") {
+                            return view('vcard.classic-portfolio-light', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                         }
                     } else {
                         alert()->error(trans('Sorry, Please fill basic business details.'));

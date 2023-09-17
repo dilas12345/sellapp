@@ -15,6 +15,7 @@ use App\Currency;
 use Carbon\Carbon;
 use App\Transaction;
 use App\BusinessCard;
+use App\Portfolio;
 use App\BusinessHour;
 use App\StoreProduct;
 use App\BusinessField;
@@ -90,6 +91,7 @@ class CardController extends Controller
     // View Card Preview
     public function viewPreview(Request $request, $id)
     {
+        
         $card_details = DB::table('business_cards')->where('card_id', $id)->where('status', 1)->first();
 
         if (isset($card_details)) {
@@ -247,6 +249,7 @@ class CardController extends Controller
                     $shareComponent['telegram'] = "https://telegram.me/share/url?text=$shareContent&url=$url";
                     $shareComponent['whatsapp'] = "https://api.whatsapp.com/send/?phone&text=$shareContent";
 
+                    dd($card_details);
                     if ($card_details->theme_id == "7ccc432a06caa") {
                         return view('vcard.modern-vcard-light', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($card_details->theme_id == "7ccc432a06vta") {
@@ -259,6 +262,8 @@ class CardController extends Controller
                         return view('vcard.metro-vcard-light', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($card_details->theme_id == "7ccc432a06vhd") {
                         return view('vcard.metro-vcard-dark', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                    } else if ($card_details->theme_id == "7ccc432a06vho") {
+                        return view('vcard.classic-portfolio-light', compact('card_details', 'plan_details', 'business_card_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     }
                 } else {
                     alert()->error(trans('Sorry, Please fill basic business details.'));
@@ -274,14 +279,15 @@ class CardController extends Controller
     // Create Card
     public function CreateCard()
     {
-        $themes = Theme::where('theme_description', 'vCard')->where('status', 1)->get();
+        $themes = Theme::where('theme_description', 'Web-landing page')->where('status', 1)->get();
         $settings = Setting::where('status', 1)->first();
         $cards = BusinessCard::where('user_id', Auth::user()->user_id)->where('card_status', 'activated')->count();
 
+        // dd($themes);
         $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
         $plan_details = json_decode($plan->plan_details);
 	
-	if($plan_details->no_of_vcards == 999) {
+	    if($plan_details->no_of_vcards == 999) {
             $no_cards = 999999;
         } else {
             $no_cards = $plan_details->no_of_vcards;
@@ -373,6 +379,114 @@ class CardController extends Controller
         } else {
             alert()->error(trans('Sorry, personalized link was already registered.'));
             return redirect()->route('user.create.card');
+        }
+    }
+
+    // Create Portfolio
+    public function CreatePortfolio()
+    {
+        
+        $themes = Theme::where('theme_description', 'portfolios')->where('status', 1)->get();
+        $settings = Setting::where('status', 1)->first();
+        $portfolios = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_status', 'activated')->count();
+        // dd($themes);
+        $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
+        $plan_details = json_decode($plan->plan_details);
+	
+	    if($plan_details->no_of_vcards == 999) {
+            $no_portfolios = 999999;
+        } else {
+            $no_portfolios = $plan_details->no_of_vcards;
+        }
+
+        if ($portfolios <= $no_portfolios) {
+            return view('user.portfolio.create', compact('themes', 'settings', 'plan_details'));
+        } else {
+            alert()->error(trans('Maximum portfolio creation limit is exceeded, Please upgrade your plan.'));
+            return redirect()->route('user.create.portfolio');
+        }
+    }
+
+    // Save portfolio
+    public function savePortfolio(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'theme_id' => 'required',
+            'portfolio_color' => 'required',
+            'portfolio_lang' => 'required',
+            'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
+            'title' => 'required',
+            'subtitle' => 'required',
+            'description' => 'required',
+        ]);
+
+        // dd("Validation", $validator);
+
+        if ($validator->fails()) {
+            alert()->error(trans('Something went wrong.'));
+            return back();
+        }
+
+        $portfolioId = uniqid();
+        if ($request->link) {
+            $personalized_link = $request->link;
+        } else {
+            $personalized_link = $portfolioId;
+        }
+        $portfolios = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_status', 'activated')->count();
+        $user_details = User::where('user_id', Auth::user()->user_id)->first();
+        $plan_details = json_decode($user_details->plan_details, true);
+
+        $logo = '/backend/img/portfolio/' . 'IMG-' . uniqid() . '-' . str_replace(' ', '-', $request->logo->getClientOriginalName()) . '.' . $request->logo->extension();
+        $cover = '/backend/img/portfolio/' . 'IMG-' . uniqid() . '-' . str_replace(' ', '-', $request->cover->getClientOriginalName()) . '.' . $request->cover->extension();
+
+        $request->logo->move(public_path('backend/img/portfolio'), $logo);
+        $request->cover->move(public_path('backend/img/portfolio'), $cover);
+
+        $portfolio_url = strtolower(preg_replace('/\s+/', '-', $personalized_link));
+
+        $current_portfolio = Portfolio::where('portfolio_url', $portfolio_url)->count();
+
+	    if($plan_details['no_of_portfolio'] == 999) {
+            $no_portfolios = 999999;
+        } else {
+            $no_portfolios = $plan_details['no_of_portfolio'];
+        }
+
+        if ($current_portfolio == 0) {
+            // Checking, If the user plan allowed card creation is less than created card.
+            if ($portfolios < $no_portfolios) {
+                try {
+                    $portfolio_id = $portfolioId;
+                    $portfolio = new Portfolio();
+                    $portfolio->card_id = $portfolio_id;
+                    $portfolio->user_id = Auth::user()->user_id;
+                    $portfolio->theme_id = $request->theme_id;
+                    $portfolio->theme_color = $request->portfolio_color;
+                    $portfolio->portfolio_lang = $request->portfolio_lang;
+                    $portfolio->cover = $cover;
+                    $portfolio->profile = $logo;
+                    $portfolio->portfolio_url = $portfolio_url;
+                    $portfolio->portfolio_type = 'portfolio';
+                    $portfolio->title = $request->title;
+                    $portfolio->sub_title = $request->subtitle;
+                    $portfolio->description = $request->description;
+                    $portfolio->save();
+
+                    alert()->success(trans('New Business Setup Created Successfully!'));
+                    return redirect()->route('user.social.links', $portfolio_id);
+                } catch (\Exception $th) {
+                    alert()->error(trans('Sorry, personalized link was already registered.'));
+                    return redirect()->route('user.create.portfolio');
+                }
+            } else {
+                alert()->error(trans('Maximum card creation limit is exceeded, Please upgrade your plan to add more card(s).'));
+                return redirect()->route('user.create.portfolio');
+            }
+        } else {
+            alert()->error(trans('Sorry, personalized link was already registered.'));
+            return redirect()->route('user.create.portfolio');
         }
     }
 

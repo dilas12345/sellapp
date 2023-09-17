@@ -109,7 +109,27 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'namespace' => 'User', 'middl
         Route::post('save-galleries/{id}', 'CardController@saveGalleries')->name('save.galleries');
         Route::get('business-hours/{id}', 'CardController@businessHours')->name('business.hours');
         Route::post('save-business-hours/{id}', 'CardController@saveBusinessHours')->name('save.business.hours');
+
+        //Create Portfolio
+        // Route::get('create-portfolio', 'CardController@CreatePortfolio')->name('create.portfolio');
     }
+
+    if (env('APP_TYPE') == 'PORTFOLIO' || env('APP_TYPE') == 'BOTH') {
+        // Create Portfolio Card
+        Route::get('create-portfolio', 'PortfolioController@CreatePortfolio')->name('create.portfolio');
+        Route::post('save-portfolio', 'PortfolioController@savePortfolio')->name('save.business.portfolio');
+        Route::get('social-links/{id}', 'PortfolioController@socialLinks')->name('port.social.links');
+        Route::post('save-social-links/{id}', 'PortfolioController@saveSocialLinks')->name('save.social.links');
+        Route::get('payment-links/{id}', 'PortfolioController@paymentLinks')->name('port.payment.links');
+        Route::post('save-payment-links/{id}', 'PortfolioController@savePaymentLinks')->name('save.payment.links');
+        Route::get('services/{id}', 'PortfolioController@services')->name('port.services');
+        Route::post('save-services/{id}', 'PortfolioController@saveServices')->name('save.services');
+        Route::get('galleries/{id}', 'PortfolioController@galleries')->name('galleries');
+        Route::post('save-galleries/{id}', 'PortfolioController@saveGalleries')->name('save.galleries');
+        Route::get('business-hours/{id}', 'PortfolioController@businessHours')->name('business.hours');
+        Route::post('save-business-hours/{id}', 'PortfolioController@saveBusinessHours')->name('save.business.hours');
+    }
+    
     // Check link
     Route::post('check-link', 'CardController@checkLink')->name('check.link');
     // Edit Business Card
