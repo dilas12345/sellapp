@@ -97,20 +97,20 @@ class PortfolioController extends Controller
             if ($portfolio_details->card_type == "store") {
                 $enquiry_button = '#';
 
-                $business_portfolio_details = DB::table('portfolios')->where('portfolios.portfolio_id', $portfolio_details->portfolio_id)
+                $portfolio_details = DB::table('portfolios')->where('portfolios.portfolio_id', $portfolio_details->portfolio_id)
                     ->join('users', 'portfolios.user_id', '=', 'users.user_id')
                     ->select('portfolios.*', 'users.plan_details')
                     ->first();
 
-                if ($business_portfolio_details) {
+                if ($portfolio_details) {
 
                     $products = DB::table('store_products')->where('portfolio_id', $portfolio_details->portfolio_id)->where('product_status', 'instock')->orderBy('id', 'desc')->get();
 
                     $settings = Setting::where('status', 1)->first();
                     $config = DB::table('config')->get();
 
-                    $plan_details = json_decode($business_portfolio_details->plan_details, true);
-                    $store_details = json_decode($business_portfolio_details->description, true);
+                    $plan_details = json_decode($portfolio_details->plan_details, true);
+                    $store_details = json_decode($portfolio_details->description, true);
 
                     if ($store_details['whatsapp_no'] != null) {
                         $enquiry_button = $store_details['whatsapp_no'];
@@ -121,7 +121,7 @@ class PortfolioController extends Controller
 
                     $url = URL::to('/') . "/" . strtolower(preg_replace('/\s+/', '-', $portfolio_details->card_url));
                     $business_name = $portfolio_details->title;
-                    $profile = URL::to('/') . "/" . $business_portfolio_details->profile;
+                    $profile = URL::to('/') . "/" . $portfolio_details->profile;
 
                     $shareContentConfig = $config->where('config_key', 'share_content')->first();
 
@@ -157,7 +157,7 @@ class PortfolioController extends Controller
                     $url = urlencode($url);
                     $shareContent = urlencode($shareContent);
 
-                    Session::put('locale', $business_portfolio_details->card_lang);
+                    Session::put('locale', $portfolio_details->card_lang);
                     app()->setLocale(Session::get('locale'));
                     
                     $qr_url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" . $url;
@@ -169,9 +169,9 @@ class PortfolioController extends Controller
                     $shareComponent['whatsapp'] = "https://api.whatsapp.com/send/?phone&text=$shareContent";
 
                     if ($portfolio_details->theme_id == "7ccc432a06hty") {
-                        return view('vcard.modern-store-light', compact('portfolio_details', 'plan_details', 'store_details', 'business_portfolio_details', 'products', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button', 'whatsapp_msg', 'currency'));
+                        return view('portfolio.modern-store-light', compact('portfolio_details', 'plan_details', 'store_details', 'portfolio_details', 'products', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button', 'whatsapp_msg', 'currency'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06hju") {
-                        return view('vcard.modern-store-dark', compact('portfolio_details', 'plan_details', 'store_details', 'business_portfolio_details', 'products', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button', 'whatsapp_msg', 'currency'));
+                        return view('portfolio.modern-store-dark', compact('portfolio_details', 'plan_details', 'store_details', 'portfolio_details', 'products', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button', 'whatsapp_msg', 'currency'));
                     }
                 } else {
                     alert()->error(trans('Sorry, Please fill basic business details.'));
@@ -179,12 +179,12 @@ class PortfolioController extends Controller
                 }
             } else {
                 $enquiry_button = null;
-                $business_portfolio_details = DB::table('portfolios')->where('portfolios.portfolio_id', $portfolio_details->portfolio_id)
+                $portfolio_details = DB::table('portfolios')->where('portfolios.portfolio_id', $portfolio_details->portfolio_id)
                     ->join('users', 'portfolios.user_id', '=', 'users.user_id')
                     ->select('portfolios.*', 'users.plan_details')
                     ->first();
 
-                if ($business_portfolio_details) {
+                if ($portfolio_details) {
 
                     $feature_details = DB::table('business_fields')->where('portfolio_id', $portfolio_details->portfolio_id)->orderBy('id', 'asc')->get();
                     $service_details = DB::table('port.services')->where('portfolio_id', $portfolio_details->portfolio_id)->orderBy('id', 'asc')->get();
@@ -200,11 +200,11 @@ class PortfolioController extends Controller
                     $settings = Setting::where('status', 1)->first();
                     $config = DB::table('config')->get();
 
-                    $plan_details = json_decode($business_portfolio_details->plan_details, true);
+                    $plan_details = json_decode($portfolio_details->plan_details, true);
 
                     $url = URL::to('/') . "/" . strtolower(preg_replace('/\s+/', '-', $portfolio_details->card_url));
                     $business_name = $portfolio_details->title;
-                    $profile = URL::to('/') . "/" . $business_portfolio_details->profile;
+                    $profile = URL::to('/') . "/" . $portfolio_details->profile;
 
                     // $shareContent = $config[30]->config_value;
                     $shareContent = ''; // Initialize $shareContent with an empty string or appropriate default value
@@ -237,7 +237,7 @@ class PortfolioController extends Controller
                     $url = urlencode($url);
                     $shareContent = urlencode($shareContent);
 
-                    Session::put('locale', $business_portfolio_details->card_lang);
+                    Session::put('locale', $portfolio_details->card_lang);
                     app()->setLocale(Session::get('locale'));
 
                     $qr_url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" . $url;
@@ -250,19 +250,19 @@ class PortfolioController extends Controller
 
                     // dd($portfolio_details);
                     if ($portfolio_details->theme_id == "7ccc432a06caa") {
-                        return view('portfolio.modern-vcard-light', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06vta") {
-                        return view('portfolio.modern-vcard-dark', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06cth") {
-                        return view('portfolio.classic-vcard-light', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06vyw") {
-                        return view('portfolio.classic-vcard-dark', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06ctw") {
-                        return view('portfolio.metro-vcard-light', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06vhd") {
-                        return view('portfolio.metro-vcard-dark', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     } else if ($portfolio_details->theme_id == "7ccc432a06vho") {
-                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'business_portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
+                        return view('portfolio.classic-portfolio-light', compact('portfolio_details', 'plan_details', 'portfolio_details', 'feature_details', 'service_details', 'galleries_details', 'payment_details', 'business_hours', 'settings', 'shareComponent', 'shareContent', 'config', 'enquiry_button'));
                     }
                 } else {
                     alert()->error(trans('Sorry, Please fill basic business details.'));
@@ -733,10 +733,10 @@ class PortfolioController extends Controller
                                 'portfolio_status' => 'activated',
                             ]);
                             alert()->success(trans('Your Business Setup Enabled'));
-                            return redirect()->route('user.cards');
+                            return redirect()->route('user.portfolio');
                         } else {
                             alert()->error(trans('Maximum card creation limit is exceeded, Please upgrade your plan.'));
-                            return redirect()->route('user.cards');
+                            return redirect()->route('user.portfolio');
                         }
                     } else {
                         $cards = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_status', 'activated')->count();
@@ -748,7 +748,7 @@ class PortfolioController extends Controller
                             return redirect()->route('user.edit.card', $id)->with('errors', 'Your plan was downgraded.');
                         } else {
                             alert()->error(trans('Maximum card creation limit is exceeded, Please upgrade your plan.'));
-                            return redirect()->route('user.cards');
+                            return redirect()->route('user.portfolio');
                         }
                     }
                 } else {
@@ -756,7 +756,7 @@ class PortfolioController extends Controller
                         'portfolio_status' => 'inactive',
                     ]);
                     alert()->success(trans('Your Business Setup Disabled'));
-                    return redirect()->route('user.cards');
+                    return redirect()->route('user.portfolio');
                 }
             }
         }

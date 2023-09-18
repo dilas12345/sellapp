@@ -14,7 +14,7 @@
     {!! Twitter::generate() !!}
     {!! JsonLd::generate() !!}
 
-    <link rel="icon" href="{{ url('/') }}{{ $portfolio_details->profile }}" sizes="96x96" type="image/png" />
+    <link rel="icon" href="{{ url('/') }}{{ $business_card_details->profile }}" sizes="96x96" type="image/png" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
     <link rel="stylesheet" href="{{ asset('frontend/whatsapp-store/css/tailwind/tailwind.min.css') }}">
@@ -24,21 +24,21 @@
     <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
 </head>
 
-<body class="antialiased bg-body text-body font-body"
+<body class="antialiased bg-black text-body font-body"
     dir="{{(App::isLocale('ar') || App::isLocale('ur') || App::isLocale('he') ? 'rtl' : 'ltr')}}">
     <div class="">
 
         <section>
             <nav dir="ltr" class="relative">
-                <div class="p-6 flex items-center bg-white shadow">
-                    <a class="flex-shrink-0 text-2xl font-semibold">
-                        <img class="h-10" src="{{ url('/') }}{{ $portfolio_details->profile }}"
-                            alt="{{ $portfolio_details->title }}" width="auto">
+                <div class="p-6 flex items-center bg-dark shadow">
+                    <a class="flex-shrink-0 text-2xl font-semibold text-white">
+                        <img class="h-10" src="{{ url('/') }}{{ $business_card_details->profile }}"
+                            alt="{{ $business_card_details->title }}" width="auto">
                     </a>
 
 
                     <div class="ml-auto flex">
-                        <button class="navbar-burger flex items-center">
+                        <button class="navbar-burger flex items-center text-white">
                             <span class="relative inline-block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -57,11 +57,11 @@
             <div class="hidden navbar-menu relative z-50">
                 <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-10"></div>
                 <nav
-                    class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-white border-r overflow-y-auto">
+                    class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-black border-r overflow-y-auto">
                     <div class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-blue-50">
-                        <a class="text-xl text-dark font-semibold">
-                            <img class="h-8" src="{{ url('/') }}{{ $portfolio_details->profile }}"
-                                alt="{{ $portfolio_details->title }}" width="auto">
+                        <a class="text-xl text-white font-semibold">
+                            <img class="h-8" src="{{ url('/') }}{{ $business_card_details->profile }}"
+                                alt="{{ $business_card_details->title }}" width="auto">
                         </a>
                     </div>
 
@@ -69,16 +69,16 @@
 
                     <div class="pt-6 p-3">
                         <a onclick="placeOrder()" id="place-order"
-                            class="block px-4 py-3 mb-3 rounded text-white text-md text-center font-semibold bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 ">{{
-                            __('Place Order') }}</a>
+                            class="block px-4 py-3 mb-3 rounded text-white text-md text-center font-semibold bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 ">{{
+                            __('Place WhatsApp Order') }}</a>
                     </div>
 
                     <div id="empty-cart" class="pt-6 p-3">
-                        <p class="px-4 py-4 font-bold mb-4 text-center text-gray-600">{{ __('Your cart is empty.') }}
+                        <p class="px-4 py-4 font-bold mb-4 text-center text-white">{{ __('Your cart is empty.') }}
                         </p>
 
                         <a
-                            class="block navbar-backdrop px-4 py-3 mb-3 mt-4 rounded text-white text-md text-center font-semibold bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 ">{{
+                            class="block navbar-backdrop px-4 py-3 mb-3 mt-4 rounded text-white text-md text-center font-semibold bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 ">{{
                             __('Start Shopping') }}</a>
                     </div>
 
@@ -89,16 +89,16 @@
 
         <div class="py-6 px-1">
             <div class="container px-4 mx-auto">
-                <h2 class="text-2xl font-bold">{{ $portfolio_details->sub_title }}</h2>
+                <h2 class="text-2xl font-bold text-white">{{ $business_card_details->sub_title }}</h2>
             </div>
         </div>
 
         <section class="py-1">
             <div class="container px-4 mx-auto">
-                <div class="rounded overflow-hidden">
+                <div class="rounded bg-white overflow-hidden text-dark">
                     <img class="rounded pb-2"
-                        src="{{ url('/') }}{{ $portfolio_details->cover }}"
-                        alt="{{ $portfolio_details->title }}">
+                        src="{{ url('/') }}{{ $business_card_details->cover }}"
+                        alt="{{ $business_card_details->title }}">
                 </div>
             </div>
         </section>
@@ -110,8 +110,8 @@
                     @foreach ($products as $product)
                     <div class="w-1/1 lg:w-1/3 p-4">
                         <div class="p-4 bg-white shadow-lg rounded-lg">
-                            <div class="w-full mb-2">
-                                <img class="rounded pb-2"
+                            <div class="w-full mb-2 text-dark">
+                                <img class="w-full pb-2"
                                     id="{{ $product->product_id }}_product_image"
                                     src="{{ asset($product->product_image) }}" alt="{{ $product->product_name }}">
                             </div>
@@ -119,14 +119,14 @@
                                     $product->badge }}</span>
                             <div class="w-full mb-1 mt-1 justify-between items-center">
                                 <div>
-                                    <h3 id="{{ $product->product_id }}_product_name" class="text-sm font-medium">
+                                    <h3 id="{{ $product->product_id }}_product_name" class="text-sm font-medium text-dark">
                                         {{ $product->product_name }}</h3>
-                                    <span id="{{ $product->product_id }}_subtitle" class="text-xs text-gray-500">{{
+                                    <span id="{{ $product->product_id }}_subtitle" class="text-xs text-dark">{{
                                         $product->product_subtitle }}</span>
                                 </div>
                             </div>
                             <div class="w-full mb-1 justify-between items-center">
-                                <h4 class="text-sm mb-3 font-bold"><span id="{{ $product->product_id }}_currency">{{
+                                <h4 class="text-sm mb-3 font-bold text-dark"><span id="{{ $product->product_id }}_currency">{{
                                         $currency }}</span> <span id="{{ $product->product_id }}_price">{{
                                         $product->sales_price }}</span>
                                     @if ($product->sales_price != $product->regular_price)
@@ -136,7 +136,7 @@
                                 </h4>
                                 @if ($product->product_status == "instock")
                                 <a onclick="addToCart('{{ $product->product_id }}')"
-                                    class="py-2 px-4 bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 rounded text-md text-white transition duration-200">{{
+                                    class="py-2 px-4 bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 rounded text-md text-white transition duration-200">{{
                                     __('Add') }}</a>
                                 @endif
                             </div>
@@ -152,17 +152,17 @@
         <div class="py-8">
 
 
-            <div id="share" class="w-auto border-t px-5 align-middle py-4 border-b">
-                <p class="text-gray-700 font-semibold text-lg">{{ __('Share on') }}</p>
+            <div id="share" class="w-auto px-5 align-middle py-4 border-b">
+                <p class="text-white font-semibold text-lg">{{ __('Share on') }}</p>
             </div>
 
-            <div class="w-auto ml-6 pb-3 border-t pt-3">
+            <div class="w-auto ml-6 pb-3 pt-3">
                 <ul class="grid grid-flow-col lg:grid-cols-12 grid-cols-6 grid-rows-1">
 
                     <a target="_blank" href="{{ $shareComponent['facebook'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-facebook"></i>
                             </div>
                         </li>
@@ -171,7 +171,7 @@
                     <a target="_blank" href="{{ $shareComponent['twitter'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-twitter"></i>
                             </div>
                         </li>
@@ -180,7 +180,7 @@
                     <a target="_blank" href="{{ $shareComponent['linkedin'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-linkedin"></i>
                             </div>
                         </li>
@@ -189,7 +189,7 @@
                     <a target="_blank" href="{{ $shareComponent['telegram'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-telegram"></i>
                             </div>
                         </li>
@@ -198,7 +198,7 @@
                     <a target="_blank" href="{{ $shareComponent['whatsapp'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
                         </li>
@@ -215,12 +215,12 @@
 
         @if ($plan_details['is_watermark_enabled'] == "1" && $plan_details['hide_branding'] == "1")
         <div class="my-4 mt-12">
-            <p class="mb-2 text-center text-base text-dark">{{ __('Copyright') }} &copy; {{ $card_details->title }} <span id="year"></span>.
+            <p class="mb-2 text-center text-base text-white">{{ __('Copyright') }} &copy; {{ $card_details->title }} <span id="year"></span>.
             </p>
         </div>
         @else
         <div class="my-4 mt-12">
-            <p class="mb-2 text-center text-base text-gray-500">{{ __('Copyright') }} &copy; <span id="year"></span>. <a
+            <p class="mb-2 text-center text-base text-white">{{ __('Copyright') }} &copy; <span id="year"></span>. <a
                     href="{{ url('/') }}">{{ config('app.name') }} {{ __('E-commerce Store')}}</a></p>
         </div>
         @endif
@@ -248,7 +248,7 @@
                 if (cart[index].product_id == pid) {
                     cart[index].qty = cart[index].qty + 1;
                     quantity_increment = true;
-                    successAlert('{{ __('Cart updated') }}');
+                    successAlert('{{ __("Cart updated") }}');
                     updateBadge();
                 }
             }
@@ -269,9 +269,9 @@
                 var total_price = 0;
                 total_price = cart[j].qty * Number(cart[j].price);
                 grandTotal += Number(total_price);
-                cart_items += '<div class="p-4 bg-white rounded"><img class="rounded bp-2" src="' + cart[j].product_image + '"><div class="flex mb-6 mt-1 justify-between items-center"><div><h3 class="text-sm font-medium">' + cart[j].product_name + '</h3> <span class="text-xs text-gray-500">' + cart[j].subtitle + '</span></div></div><div class="flex mb-2 justify-between items-center"><h4 class="text-xl font-bold">' + currency + ' ' + total_price + '</h4> <a onclick="reduceQty(' + j + ')" class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-white transition duration-200">-</a><h4 class="text-sm font-medium">' + cart[j].qty + '</h4> <a onclick="addQty(' + j + ')" class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-white transition duration-200">+</a> <a class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-white transition duration-200" onclick="removeFromCart(' + j + ')">X</a></div></div>';
+                cart_items += '<div class="p-4 bg-white rounded"><img class="rounded pb-2" src="' + cart[j].product_image + '"><div class="flex mb-6 justify-between items-center"><div><h3 class="text-sm font-medium text-black">' + cart[j].product_name + '</h3> <span class="text-xs text-black">' + cart[j].subtitle + '</span></div></div><div class="flex mb-2 justify-between items-center"><h4 class="text-xl font-bold text-black">' + currency + ' ' + total_price + '</h4> <a onclick="reduceQty(' + j + ')" class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-black transition duration-200">-</a><h4 class="text-sm font-medium text-black">' + cart[j].qty + '</h4> <a onclick="addQty(' + j + ')" class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-black transition duration-200">+</a> <a class="py-2 px-3 bg-red-500 hover:bg-red-600 rounded-full text-xs text-black transition duration-200" onclick="removeFromCart(' + j + ')">X</a></div></div>';
             }
-            cart_items += '<br> <h3 class="pl-4 pt-4 pr-4 font-bold">{{ __("Grand total:") }} ' + currency + ' ' + grandTotal.toFixed(2) + '</h3>';
+            cart_items += '<br> <h3 class="pl-4 pt-4 pr-4 font-bold text-white">{{ __("Grand total:") }} ' + currency + ' ' + grandTotal.toFixed(2) + '</h3>';
             $("#cart_items").html(cart_items);
         }
 
@@ -328,7 +328,7 @@
             "use strict";
             Swal.fire({
                 html:
-                    '<div class="text-left mt-2"> <p class="text-md">{{ __("Please fill following details:") }} </p>' +
+                    '<div class="text-left mt-2 bg-black"> <p class="text-md">{{ __("Please fill following details:") }} </p>' +
                     '<label class="mt-6 block text-gray-700 text-sm font-bold mb-2" for="cus_name">{{ __("Full Name") }}</label>' +
                     '<input id="cus_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">' +
 
@@ -387,7 +387,7 @@
                 var link = "https://api.whatsapp.com/send/?phone=" + whatsAppNumber + "&text=" + encodeURI(waShareContent);
                 window.open(link, '_blank');
 
-                successAlert('{{ __('Order Placed!') }}');
+                successAlert('{{ __("Order Placed!") }}');
             } else {
                 placeOrder();
             }
