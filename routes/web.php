@@ -86,7 +86,9 @@ Route::group(['as' => 'user.', 'prefix' => 'user', 'namespace' => 'User', 'middl
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     // Business Sites
     Route::get('cards', 'CardController@cards')->name('cards');
+    Route::get('portfolio', 'PortfolioController@portfolios')->name('portfolio');
     Route::get('card-status/{id}', 'CardController@cardStatus')->name('card.status');
+    Route::get('portfolio-status/{id}', 'PortfolioController@portfolioStatus')->name('portfolio.status');
     // Business Plans
     Route::get('plans', 'CardController@plans')->name('plans');
     // Media

@@ -96,17 +96,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (!empty($business_cards) && $business_cards->count())
-                                    @foreach ($business_cards as $business_card)
+                                    @if (!empty($portfolios) && $portfolios->count())
+                                    @foreach ($portfolios as $portfolio)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $business_card->card_id }}</td>
-                                        <td>{{ $business_card->title }}</td>
-                                        <td>{{ $business_card->card_type == 'webiste' ? 'landing page' : 'E-commerce Store' }}</td>
+                                        <td>{{ $portfolio->portfolio_id }}</td>
+                                        <td>{{ $portfolio->title }}</td>
+                                        <td>{{ $portfolio->portfolio_type == 'webiste' ? 'portfolio' : 'E-commerce Store' }}</td>
                                         <td class="text-muted">
-                                            {{ date('d/M/Y', strtotime($business_card->plan_validity)) }}</td>
+                                            {{ date('d/M/Y', strtotime($portfolio->plan_validity)) }}</td>
                                         <td class="text-muted">
-                                            @if ($business_card->card_status == 'inactive')
+                                            @if ($portfolio->portfolio_status == 'inactive')
                                             <span class="badge bg-red">{{ __('Inactive') }}</span
                                             @else
                                             <span class="badge bg-green">{{ __('Active') }}</span>
@@ -114,23 +114,23 @@
                                         </td>
                                         <td>
                                             <div class="btn-list flex-nowrap">
-                                                <a class="open-qr btn btn-primary btn-sm" data-id="{{ $business_card->card_url }}"
+                                                <a class="open-qr btn btn-primary btn-sm" data-id="{{ $portfolio->porfolio_url }}"
                                                     href="#openQR">{{ __('Scan') }}</a>
                                                 <a class="btn btn-primary btn-sm"
-                                                    href="{{ route('user.edit.card', $business_card->card_id)}}">{{ __('Edit') }}</a>
+                                                    href="{{ route('user.edit.card', $portfolio->portfolio_id)}}">{{ __('Edit') }}</a>
                                                 <a class="btn btn-primary btn-sm"
-                                                    href="{{ route('user.view.preview', $business_card->card_id)}}"
+                                                    href="{{ route('user.view.preview', $portfolio->portfolio_id)}}"
                                                     target="_blank">{{ __('Preview') }}</a>
                                                 <a class="btn btn-primary btn-sm"
-                                                    href="{{ URL::to('/')."/".$business_card->card_url }}"
+                                                    href="{{ URL::to('/')."/".$portfolio->porfolio_url }}"
                                                     target="_blank">{{ __('Live') }}</a>
-                                                @if ($business_card->card_status == 'activated')
+                                                @if ($portfolio->portfolio_status == 'activated')
                                                 <a class="open-model btn btn-primary btn-sm"
-                                                    data-id="{{ $business_card->card_id }}"
+                                                    data-id="{{ $portfolio->portfolio_id }}"
                                                     href="#openModel">{{ __('Disable') }}</a>
                                                 @else
                                                 <a class="open-model btn btn-primary btn-sm"
-                                                    data-id="{{ $business_card->card_id }}"
+                                                    data-id="{{ $portfolio->portfolio_id }}"
                                                     href="#openModel">{{ __('Enable') }}</a>
                                                 @endif
                                             </div>

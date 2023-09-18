@@ -56,10 +56,10 @@ class PortfolioController extends Controller
             $portfolios = DB::table('portfolios')
                 ->join('users', 'portfolios.user_id', '=', 'users.user_id')
                 ->select('users.user_id', 'users.plan_validity', 'portfolios.*')
-                ->where('portfolios.user_id', Auth::user()->user_id)->where('portflios.status', 1)->orderBy('business_cards.id', 'desc')->get();
+                ->where('portfolios.user_id', Auth::user()->user_id)->where('portfolios.status', 1)->orderBy('portfolios.id', 'desc')->get();
             $settings = Setting::where('status', 1)->first();
 
-            return view('user.portfolio.cards', compact('portfolios', 'settings'));
+            return view('user.portfolio.portfolio', compact('portfolios', 'settings'));
         } else {
             return redirect()->route('user.plans');
         }
@@ -179,9 +179,9 @@ class PortfolioController extends Controller
                 }
             } else {
                 $enquiry_button = null;
-                $business_portfolio_details = DB::table('business_cards')->where('business_cards.portfolio_id', $portfolio_details->portfolio_id)
-                    ->join('users', 'business_cards.user_id', '=', 'users.user_id')
-                    ->select('business_cards.*', 'users.plan_details')
+                $business_portfolio_details = DB::table('portfolios')->where('portfolios.portfolio_id', $portfolio_details->portfolio_id)
+                    ->join('users', 'portfolios.user_id', '=', 'users.user_id')
+                    ->select('portfolios.*', 'users.plan_details')
                     ->first();
 
                 if ($business_portfolio_details) {
@@ -399,9 +399,9 @@ class PortfolioController extends Controller
     // Save social links
     public function saveSocialLinks(Request $request, $id)
     {
-        $business_card = Portfolio::where('portfolio_id', $id)->first();
+        $portfolio = Portfolio::where('portfolio_id', $id)->first();
 
-        if ($business_card == null) {
+        if ($portfolio == null) {
             return view('errors.404');
         } else {
             if ($request->icon != null) {
@@ -472,9 +472,9 @@ class PortfolioController extends Controller
     // Save payment links
     public function savePaymentLinks(Request $request, $id)
     {
-        $business_card = Portfolio::where('portfolio_id', $id)->first();
+        $portfolio = Portfolio::where('portfolio_id', $id)->first();
 
-        if ($business_card == null) {
+        if ($portfolio == null) {
             return view('errors.404');
         } else {
             if ($request->icon != null) {
@@ -525,9 +525,9 @@ class PortfolioController extends Controller
     // Save port.services
     public function saveservices(Request $request, $id)
     {
-        $business_card = Portfolio::where('portfolio_id', $id)->first();
+        $portfolio = Portfolio::where('portfolio_id', $id)->first();
 
-        if ($business_card == null) {
+        if ($portfolio == null) {
             return view('errors.404');
         } else {
             $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
@@ -575,9 +575,9 @@ class PortfolioController extends Controller
     public function saveGalleries(Request $request, $id)
     {
 
-        $business_card = Portfolio::where('portfolio_id', $id)->first();
+        $portfolio = Portfolio::where('portfolio_id', $id)->first();
 
-        if ($business_card == null) {
+        if ($portfolio == null) {
             return view('errors.404');
         } else {
             $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
@@ -618,9 +618,9 @@ class PortfolioController extends Controller
     // Save business hours
     public function saveBusinessHours(Request $request, $id)
     {
-        $business_card = Portfolio::where('portfolio_id', $id)->first();
+        $portfolio = Portfolio::where('portfolio_id', $id)->first();
 
-        if ($business_card == null) {
+        if ($portfolio == null) {
             return view('errors.404');
         } else {
             if ($request->monday_closed == "on") {
@@ -702,19 +702,19 @@ class PortfolioController extends Controller
     }
 
     // Card Status Page
-    public function cardStatus(Request $request, $id)
+    public function portfolioStatus(Request $request, $id)
     {
         $Portfolio = Portfolio::where('portfolio_id', $id)->first();
 
         if ($Portfolio == null) {
             return view('errors.404');
         } else {
-            $business_card = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_id', $id)->first();
+            $portfolio = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_id', $id)->first();
 
-            if ($business_card == null) {
+            if ($portfolio == null) {
                 return view('errors.404');
             } else {
-                if ($business_card->card_status == 'inactive') {
+                if ($portfolio->portfolio_status == 'inactive') {
                     $plan = User::where('user_id', Auth::user()->user_id)->first();
                     $active_plan = json_decode($plan->plan_details);
                     $no_of_features = PortBusinessField::where('portfolio_id', $id)->count();
@@ -723,14 +723,14 @@ class PortfolioController extends Controller
                     $no_of_services = Service::where('portfolio_id', $id)->count();
                     $no_of_products = StoreProduct::where('portfolio_id', $id)->count();
                     if ($no_of_services <= $active_plan->no_of_services && $no_of_galleries <= $active_plan->no_of_galleries && $no_of_features <= $active_plan->no_of_features && $no_of_payments <= $active_plan->no_of_payments && $no_of_products <= $active_plan->no_of_port.services) {
-                        $cards = Portfolio::where('user_id', Auth::user()->user_id)->where('card_status', 'activated')->count();
+                        $cards = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_status', 'activated')->count();
 
                         $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
                         $plan_details = json_decode($plan->plan_details);
 
                         if ($cards < $plan_details->no_of_portfolios) {
                             Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_id', $id)->update([
-                                'card_status' => 'activated',
+                                'portfolio_status' => 'activated',
                             ]);
                             alert()->success(trans('Your Business Setup Enabled'));
                             return redirect()->route('user.cards');
@@ -739,7 +739,7 @@ class PortfolioController extends Controller
                             return redirect()->route('user.cards');
                         }
                     } else {
-                        $cards = Portfolio::where('user_id', Auth::user()->user_id)->where('card_status', 'activated')->count();
+                        $cards = Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_status', 'activated')->count();
 
                         $plan = DB::table('users')->where('user_id', Auth::user()->user_id)->where('status', 1)->first();
                         $plan_details = json_decode($plan->plan_details);
@@ -753,7 +753,7 @@ class PortfolioController extends Controller
                     }
                 } else {
                     Portfolio::where('user_id', Auth::user()->user_id)->where('portfolio_id', $id)->update([
-                        'card_status' => 'inactive',
+                        'portfolio_status' => 'inactive',
                     ]);
                     alert()->success(trans('Your Business Setup Disabled'));
                     return redirect()->route('user.cards');
@@ -846,7 +846,7 @@ class PortfolioController extends Controller
                     ]);
                     // Making all cards inactive, For Plan change
                     Portfolio::where('user_id', Auth::user()->user_id)->update([
-                        'card_status' => 'inactive',
+                        'portfolio_status' => 'inactive',
                     ]);
                     alert()->success(trans("FREE Plan activated!"));
                     return redirect()->back();
@@ -874,7 +874,7 @@ class PortfolioController extends Controller
     public function checkLink(Request $request)
     {
         $link = $request->link;
-        $is_present = DB::table('business_cards')->where('card_url', $link)->count();
+        $is_present = DB::table('portfolios')->where('portfolio_url', $link)->count();
         $resp = [];
         $resp['status'] = 'failed';
 
