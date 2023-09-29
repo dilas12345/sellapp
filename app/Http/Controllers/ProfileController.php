@@ -60,7 +60,7 @@ class ProfileController extends Controller
                         OpenGraph::setTitle($business_card_details->sub_title);
                         OpenGraph::setDescription($business_card_details->sub_title);
                         OpenGraph::setUrl(URL::to('/') . '/' . $business_card_details->card_url);
-                        OpenGraph::addImage([URL::to('/') . $business_card_details->profile, 'size' => 300]);
+                        OpenGraph::addImage([URL::to('/') . $business_card_details->profile, 'size' => 3000]);
 
                         JsonLd::setTitle($business_card_details->title);
                         JsonLd::setDescription($business_card_details->sub_title);
