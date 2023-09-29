@@ -14,7 +14,7 @@
     {!! Twitter::generate() !!}
     {!! JsonLd::generate() !!}
 
-    <link rel="icon" href="{{ url('/') }}{{ $portfolio_details->profile }}" sizes="96x96" type="image/png" />
+    <link rel="icon" href="{{ url('/') }}{{ $business_card_details->profile }}" sizes="96x96" type="image/png" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
     <link rel="stylesheet" href="{{ asset('frontend/whatsapp-store/css/tailwind/tailwind.min.css') }}">
@@ -32,8 +32,8 @@
             <nav dir="ltr" class="relative">
                 <div class="p-6 flex items-center bg-white shadow">
                     <a class="flex-shrink-0 text-2xl font-semibold">
-                        <img class="h-10" src="{{ url('/') }}{{ $portfolio_details->profile }}"
-                            alt="{{ $portfolio_details->title }}" width="auto">
+                        <img class="h-10" src="{{ url('/') }}{{ $business_card_details->profile }}"
+                            alt="{{ $business_card_details->title }}" width="auto">
                     </a>
 
 
@@ -60,8 +60,8 @@
                     class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-white border-r overflow-y-auto">
                     <div class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-blue-50">
                         <a class="text-xl text-dark font-semibold">
-                            <img class="h-8" src="{{ url('/') }}{{ $portfolio_details->profile }}"
-                                alt="{{ $portfolio_details->title }}" width="auto">
+                            <img class="h-8" src="{{ url('/') }}{{ $business_card_details->profile }}"
+                                alt="{{ $business_card_details->title }}" width="auto">
                         </a>
                     </div>
 
@@ -69,7 +69,7 @@
 
                     <div class="pt-6 p-3">
                         <a onclick="placeOrder()" id="place-order"
-                            class="block px-4 py-3 mb-3 rounded text-white text-md text-center font-semibold bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 ">{{
+                            class="block px-4 py-3 mb-3 rounded text-white text-md text-center font-semibold bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 ">{{
                             __('Place Order') }}</a>
                     </div>
 
@@ -78,7 +78,7 @@
                         </p>
 
                         <a
-                            class="block navbar-backdrop px-4 py-3 mb-3 mt-4 rounded text-white text-md text-center font-semibold bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 ">{{
+                            class="block navbar-backdrop px-4 py-3 mb-3 mt-4 rounded text-white text-md text-center font-semibold bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 ">{{
                             __('Start Shopping') }}</a>
                     </div>
 
@@ -89,7 +89,7 @@
 
         <div class="py-6 px-1">
             <div class="container px-4 mx-auto">
-                <h2 class="text-2xl font-bold">{{ $portfolio_details->sub_title }}</h2>
+                <h2 class="text-2xl font-bold">{{ $business_card_details->sub_title }}</h2>
             </div>
         </div>
 
@@ -97,8 +97,8 @@
             <div class="container px-4 mx-auto">
                 <div class="rounded overflow-hidden">
                     <img class="rounded pb-2"
-                        src="{{ url('/') }}{{ $portfolio_details->cover }}"
-                        alt="{{ $portfolio_details->title }}">
+                        src="{{ url('/') }}{{ $business_card_details->cover }}"
+                        alt="{{ $business_card_details->title }}">
                 </div>
             </div>
         </section>
@@ -136,7 +136,7 @@
                                 </h4>
                                 @if ($product->product_status == "instock")
                                 <a onclick="addToCart('{{ $product->product_id }}')"
-                                    class="py-2 px-4 bg-{{ $portfolio_details->theme_color }}-500 hover:bg-{{ $portfolio_details->theme_color }}-600 rounded text-md text-white transition duration-200">{{
+                                    class="py-2 px-4 bg-{{ $business_card_details->theme_color }}-500 hover:bg-{{ $business_card_details->theme_color }}-600 rounded text-md text-white transition duration-200">{{
                                     __('Add') }}</a>
                                 @endif
                             </div>
@@ -162,7 +162,7 @@
                     <a target="_blank" href="{{ $shareComponent['facebook'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-facebook"></i>
                             </div>
                         </li>
@@ -171,7 +171,7 @@
                     <a target="_blank" href="{{ $shareComponent['twitter'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-twitter"></i>
                             </div>
                         </li>
@@ -180,7 +180,7 @@
                     <a target="_blank" href="{{ $shareComponent['linkedin'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-linkedin"></i>
                             </div>
                         </li>
@@ -189,7 +189,7 @@
                     <a target="_blank" href="{{ $shareComponent['telegram'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-telegram"></i>
                             </div>
                         </li>
@@ -198,7 +198,7 @@
                     <a target="_blank" href="{{ $shareComponent['whatsapp'] }}">
                         <li class="flex cursor-pointer items-center">
                             <div
-                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $portfolio_details->theme_color }}-300 to-{{ $portfolio_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
+                                class="flex justify-center items-center content-center bg-gradient-to-br from-{{ $business_card_details->theme_color }}-300 to-{{ $business_card_details->theme_color }}-600 shadow-md hover:shadow-lg h-12 w-12 rounded-full fill-current text-white">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
                         </li>
