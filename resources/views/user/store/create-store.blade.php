@@ -118,7 +118,7 @@
                                             <div class="mb-3">
                                                 <div class="form-label required">{{ __('Banner') }} <span
                                                         class="text-danger">({{ __('Recommended : 1920 x 550 pixels')
-                                                        }})</span></div>
+                                                        }})</span> 1.5MB</div>
                                                 <input type="file" class="form-control" name="banner"
                                                     placeholder="{{ __('Banner') }}..." required
                                                     accept=".jpeg,.jpg,.png,.gif,.svg" />
@@ -128,7 +128,7 @@
                                             <div class="mb-3">
                                                 <div class="form-label required">{{ __('Logo') }} <span
                                                         class="text-danger">({{ __('Recommended: 180 x 90 pixels')
-                                                        }})</span></div>
+                                                        }})</span> 1.5MB</div>
                                                 <input type="file" class="form-control" name="logo"
                                                     placeholder="{{ __('Logo') }}..." required
                                                     accept=".jpeg,.jpg,.png,.gif,.svg" />
