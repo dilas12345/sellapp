@@ -44,7 +44,7 @@ class HomeController extends Controller
             OpenGraph::setTitle($settings->site_name);
             OpenGraph::setDescription($settings->seo_meta_description);
             OpenGraph::setUrl(URL::to('/') . '/');
-            OpenGraph::addImage([URL::to('/') . $settings->site_logo, 'size' => 300]);
+            OpenGraph::addImage([URL::to('/') . $settings->site_logo, 'size' => 3000]);
 
             JsonLd::setTitle($settings->site_name);
             JsonLd::setDescription($settings->seo_meta_description);
