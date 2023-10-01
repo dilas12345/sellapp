@@ -31,9 +31,10 @@
                             @csrf
                             <div class="dz-message">
                                 {{ __('Drag and Drop Single/Multiple Files Here') }} <br>
+                                {{ __('Recommended File size') }}
                             </div>
                         </form>
-                    </div
+                </div>
                 </div>
             </div>
         </div>
@@ -45,7 +46,7 @@
 <script type="text/javascript">
     Dropzone.options.dropzone = {
         maxFilesize: 4,
-        // maxFilesize  : 5, //{{env('SIZE_LIMIT')/1024}},
+        maxFilesize  : {{env('SIZE_LIMIT')/1024}},
         acceptedFiles: ".jpeg,.jpg,.png,.gif"
     };
 </script>

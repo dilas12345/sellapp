@@ -59,7 +59,7 @@ class SettingsController extends Controller
         ];
 
         $image_limit = [
-            'SIZE_LIMIT' => env('SIZE_LIMIT', '3040')
+            'SIZE_LIMIT' => env('SIZE_LIMIT', '30240')
         ];
 
         $recaptcha_configuration = [
