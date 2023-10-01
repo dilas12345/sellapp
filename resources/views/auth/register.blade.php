@@ -109,7 +109,7 @@
                         <div class="px-3 text-center">
                             <button
                                 class="mb-2 w-full py-4 bg-blue-600 hover:bg-blue-700 rounded text-sm font-bold text-gray-50 transition duration-200">{{ __('Sign Up') }}</button>
-                            <span class="text-gray-400 text-xs">
+                            <span class="text-gray-700 text-md">
                                 <span>{{ __('Already have an account?') }}</span>
                                 <a class="text-slate-600 hover:underline"
                                     href="{{ route('login') }}">{{ __('Sign In') }}</a>

@@ -84,7 +84,7 @@
                                     {{ __('Continue with Google') }}</button></a>
                             @endif
 
-                            <span class="text-gray-400 text-xs">
+                            <span class="text-gray-700 text-md">
                                 <span>{{ __('If you do not have an account?') }}</span>
                                 <a class="text-slate-600 hover:underline"
                                     href="{{ route('register') }}">{{ __('Sign Up') }}</a>
