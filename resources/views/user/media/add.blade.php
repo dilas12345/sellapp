@@ -46,7 +46,7 @@
 <script type="text/javascript">
     Dropzone.options.dropzone = {
         maxFilesize: 4,
-        maxFilesize  : {{env('SIZE_LIMIT')/1024}},
+        maxFilesize:  5, //: {{env('SIZE_LIMIT')/1024}},
         acceptedFiles: ".jpeg,.jpg,.png,.gif"
     };
 </script>

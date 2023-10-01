@@ -7,9 +7,14 @@
         <div class="mt-10 pt-6 lg:pt-16 pb-6 w-full lg:w-1/2">
             <div class="max-w-md mx-auto">
                 <div class="mb-6 lg:mb-20 w-full px-3 flex items-center justify-between"><a
-                        class="text-3xl font-bold leading-none" href="{{ url('/') }}">{{ config('app.name') }}</a><a
-                        class="py-2 px-6 text-xs rounded-l-xl rounded-t-xl bg-slate-600 hover:bg-slate-700 text-white font-bold transition duration-200"
-                        href="{{ route('login') }}">{{ __('Sign In') }}</a></div>
+                    class="text-3xl font-bold leading-none" href="{{ url('/') }}">{{ config('app.name') }}</a>
+                </div>
+                <div class="mb-6 lg:mb-20 w-full px-3 flex items-center justify-between">                   
+                        <span class="text-gray-500 text-md">Already have an Account?</span>
+                        <button class="mb-2 w-full py-4 bg-blue-600 hover:bg-blue-700 rounded text-sm font-bold text-gray-50 transition duration-200"> 
+                        <a class="py-2 px-6 text-md rounded-l-xl rounded-t-xl bg-slate-600 hover:bg-slate-700 text-white] font-bold transition duration-200"
+                    href="{{ route('login') }}">{{ __('Sign In') }}</a></button>
+                </div>
                 <div>
                     <div class="mb-6 px-3">
                         <span class="text-gray-500">{{ __('Sign Up') }}</span>
