@@ -37,7 +37,7 @@
                                         @for ($i = 0; $i < count($galleries); $i++) <div class='row' id="{{ $i }}">
                                             <div class="col-md-6 col-xl-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label required">{{ __('Gallery Image') }} <span class='text-danger'>({{ __('Recommended : 200 x 200 pixels') }})</span></label>
+                                                    <label class="form-label required">{{ __('Gallery Image') }} <span class='text-danger'>({{ __('Recommended : 200 x 200 pixels') }})</span> 1.5MB</label>
                                                     <div class="input-group mb-2">
                                                         <input type="text"
                                                             class="image{{ $galleries[$i]->id }} media-model form-control"
@@ -159,7 +159,7 @@
         count++;
         var id = getRandomInt();
         var gallery =
-            "<div class='row' id="+ id +"><div class='col-md-6 col-xl-6'><div class='mb-3'><label class='form-label required'>{{ __('Gallery Image') }} <span class='text-danger'>({{ __('Recommended : 200 x 200 pixels') }})</span></label><div class='input-group mb-2'><input type='text' class='image"+ id +" media-model form-control' name='gallery_image[]' placeholder='{{ __('Gallery Image') }}' required><button class='btn btn-primary btn-md' type='button' onclick='openMedia("+ id +")'>{{ __('Choose image') }}</button></div></div></div><div class='col-md-6 col-xl-6'> <div class='mb-3'> <label class='form-label required'>Image Caption</label> <input type='text' class='form-control' name='caption[]' placeholder='Image Caption...' required> <a href='#' class='btn mt-3 btn-danger btn-sm' onclick='removeGallery("+id+")'>Remove</a> </div><br></div>";
+            "<div class='row' id="+ id +"><div class='col-md-6 col-xl-6'><div class='mb-3'><label class='form-label required'>{{ __('Gallery Image') }} <span class='text-danger'>({{ __('Recommended : 200 x 200 pixels') }})</span> 1.5MB</label><div class='input-group mb-2'><input type='text' class='image"+ id +" media-model form-control' name='gallery_image[]' placeholder='{{ __('Gallery Image') }}' required><button class='btn btn-primary btn-md' type='button' onclick='openMedia("+ id +")'>{{ __('Choose image') }}</button></div></div></div><div class='col-md-6 col-xl-6'> <div class='mb-3'> <label class='form-label required'>Image Caption</label> <input type='text' class='form-control' name='caption[]' placeholder='Image Caption...' required> <a href='#' class='btn mt-3 btn-danger btn-sm' onclick='removeGallery("+id+")'>Remove</a> </div><br></div>";
             $("#more-gallery").append(gallery).html();
         }
     }
